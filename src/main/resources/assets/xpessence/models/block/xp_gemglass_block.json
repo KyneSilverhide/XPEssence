@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "xpessence:blocks/xp_gemglass_block"
+  }
+}

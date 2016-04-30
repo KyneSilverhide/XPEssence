@@ -1,9 +1,0 @@
-item.xp_gem.name=Experience gem
-item.xp_apple.name=Experience apple
-item.xp_seed.name=Experience seed
-
-tile.xp_gem_block.name=Experience Gem Block
-tile.xp_gemglass_block.name=Experience Gem Glass
-tile.xp_crop_block.name=Experience Crop
-
-itemGroup.xp_essence_tab=XP Essence

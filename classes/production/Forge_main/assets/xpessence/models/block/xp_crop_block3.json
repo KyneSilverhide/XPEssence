@@ -1,6 +1,0 @@
-{
-  "parent": "block/cross",
-  "textures": {
-    "cross": "xpessence:blocks/xp_crop3"
-  }
-}

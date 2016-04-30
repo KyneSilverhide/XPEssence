@@ -3,13 +3,8 @@ package kyne.xpessence.blocks;
 import kyne.xpessence.tab.ModTabs;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
-import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.world.World;
 
 public class BlockXPGem extends Block {
 
@@ -23,5 +18,10 @@ public class BlockXPGem extends Block {
                 .setResistance(15F)
                 .setLightOpacity(8)
                 .setHarvestLevel("pickaxe", 1);
+    }
+
+    @Override
+    public float getEnchantPowerBonus(World world, BlockPos pos) {
+        return 1;
     }
 }

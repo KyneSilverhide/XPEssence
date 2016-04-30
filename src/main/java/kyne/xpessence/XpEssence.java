@@ -1,7 +1,5 @@
 package kyne.xpessence;
 
-import java.util.logging.Logger;
-
 import kyne.xpessence.blocks.ModBlocks;
 import kyne.xpessence.items.ModItems;
 import kyne.xpessence.proxy.ClientProxy;
@@ -11,6 +9,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import java.util.logging.Logger;
 
 @Mod(modid = Reference.MODID, name = Reference.MOD_NAME, version = Reference.VERSION)
 public class XpEssence {
@@ -25,7 +25,7 @@ public class XpEssence {
 
     @Mod.EventHandler
     public void preInit(final FMLPreInitializationEvent event) {
-        logger.fine("Pre-initializing " + Reference.MODID);
+        logger.fine("Pre-initializing " + Reference.MODID + " " + event);
 
         ModBlocks.initBlocks();
         ModItems.initItems();
@@ -38,10 +38,12 @@ public class XpEssence {
 
     @Mod.EventHandler
     public void init(final FMLInitializationEvent event) {
-        logger.fine("Initializing " + Reference.MODID);
+        logger.fine("Initializing " + Reference.MODID + " " + event);
         proxy.registerRenders();
     }
 
     @Mod.EventHandler
-    public void postInit(final FMLInitializationEvent event) {}
+    public void postInit(final FMLInitializationEvent event) {
+        logger.fine("Post-initializing " + Reference.MODID + " " + event);
+    }
 }

@@ -17,11 +17,10 @@ import java.util.logging.Logger;
 
 public class BasicCrop extends BlockBush implements IGrowable {
 
-    public static Logger logger = Logger.getLogger("XP ESSENCE");
-
     public static final Integer MINSTAGE = 0;
     public static final Integer MAXSTAGE = 4;
     public static final PropertyInteger currentStage = PropertyInteger.create("stage", MINSTAGE, MAXSTAGE);
+    public static Logger logger = Logger.getLogger("XP ESSENCE");
 
     public BasicCrop() {
         this.setDefaultState(this.blockState.getBaseState().withProperty(currentStage, 0));
@@ -43,12 +42,6 @@ public class BasicCrop extends BlockBush implements IGrowable {
         this.randomGrow(worldIn, rand, pos, state);
     }
 
-    @Override
-    public void grow(final World worldIn, final Random rand, final BlockPos pos, final IBlockState state) {
-        super.updateTick(worldIn, pos, state, rand);
-        this.growNow(worldIn, pos, state);
-    }
-
     private void randomGrow(final World worldIn, final Random rand, final BlockPos pos, final IBlockState state) {
         if (worldIn.getLightFromNeighbors(pos) >= 9) {
             if (state.getValue(currentStage) < MAXSTAGE) {
@@ -59,10 +52,6 @@ public class BasicCrop extends BlockBush implements IGrowable {
                 }
             }
         }
-    }
-
-    private void growNow(final World worldIn, final BlockPos pos, final IBlockState state) {
-        worldIn.setBlockState(pos, state.cycleProperty(currentStage), 2);
     }
 
     public float getGrowthChance(final Block blockIn, final World worldIn, final BlockPos pos) {
@@ -110,6 +99,16 @@ public class BasicCrop extends BlockBush implements IGrowable {
         }
         logger.finest("f:" + f);
         return f;
+    }
+
+    private void growNow(final World worldIn, final BlockPos pos, final IBlockState state) {
+        worldIn.setBlockState(pos, state.cycleProperty(currentStage), 2);
+    }
+
+    @Override
+    public void grow(final World worldIn, final Random rand, final BlockPos pos, final IBlockState state) {
+        super.updateTick(worldIn, pos, state, rand);
+        this.growNow(worldIn, pos, state);
     }
 
     public boolean fullyGrown(final IBlockState state) {

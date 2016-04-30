@@ -1,0 +1,7 @@
+{
+    "parent": "block/pane_nw",
+    "textures": {
+        "edge": "xpessence:blocks/gemglass_pane_top",
+        "pane": "xpessence:blocks/xp_gemglass_block"
+    }
+}

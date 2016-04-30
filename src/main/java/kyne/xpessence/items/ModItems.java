@@ -11,11 +11,10 @@ import java.util.List;
 
 public class ModItems {
 
+    private static final List<Item> modItems = new ArrayList<Item>();
     public static Item xpGem;
     public static Item xpApple;
     public static Item xpSeeds;
-
-    private static final List<Item> modItems = new ArrayList<Item>();
 
     public static void initItems() {
         xpGem = build(new ItemXPGem());
@@ -34,14 +33,14 @@ public class ModItems {
         }
     }
 
+    private static void registerItem(final Item item) {
+        GameRegistry.registerItem(item, item.getUnlocalizedName().substring(5));
+    }
+
     public static void registerRenders() {
         for (final Item modItem : modItems) {
             registerRender(modItem);
         }
-    }
-
-    private static void registerItem(final Item item) {
-        GameRegistry.registerItem(item, item.getUnlocalizedName().substring(5));
     }
 
     private static void registerRender(final Item item) {

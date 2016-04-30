@@ -9,6 +9,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 public class ItemXPGem extends Item {
 
     public ItemXPGem() {
@@ -18,15 +20,22 @@ public class ItemXPGem extends Item {
 
     @Override
     public ItemStack onItemRightClick(final ItemStack itemStackIn, final World worldIn, final EntityPlayer playerIn) {
-        playerIn.addExperience(10);
         final BlockPos position = playerIn.getPosition();
         worldIn.playSound(position.getX(), position.getY(), position.getZ(), "random.orb", 0.7f, 1.0f, false);
-        return new ItemStack(itemStackIn.getItem(), itemStackIn.stackSize -1);
+
+        itemStackIn.stackSize -= 1;
+        playerIn.addExperience(10);
+        return itemStackIn;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(final ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+        list.add("Use it to gain XP");
     }
 }

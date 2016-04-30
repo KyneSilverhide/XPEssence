@@ -11,10 +11,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockXPGlassGem extends Block {
+public class BlockXPGemGlass extends Block {
 
-    public BlockXPGlassGem() {
-        super(Material.ice);
+    public BlockXPGemGlass() {
+        super(Material.glass);
         this.setUnlocalizedName("xp_gemglass_block")
                 .setCreativeTab(ModTabs.creativeTab)
                 .setLightLevel(0.7F)

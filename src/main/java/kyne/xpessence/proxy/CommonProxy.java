@@ -1,10 +1,10 @@
 package kyne.xpessence.proxy;
 
-import kyne.xpessence.Reference;
+import kyne.xpessence.Constants;
 
-public abstract class CommonProxy {
+public class CommonProxy {
 
-    public static final String PROXY_CLASS = "kyne." + Reference.MODID + ".proxy.CommonProxy";
+    public static final String PROXY_CLASS = "kyne." + Constants.MODID + ".proxy.CommonProxy";
 
     public void registerRenders() {
     }

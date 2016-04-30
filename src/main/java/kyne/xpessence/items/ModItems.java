@@ -1,6 +1,6 @@
 package kyne.xpessence.items;
 
-import kyne.xpessence.Reference;
+import kyne.xpessence.Constants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -45,7 +45,7 @@ public class ModItems {
 
     private static void registerRender(final Item item) {
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-                .register(item, 0, new ModelResourceLocation(Reference.MODID + ":" + item.getUnlocalizedName().substring(5),
+                .register(item, 0, new ModelResourceLocation(Constants.MODID + ":" + item.getUnlocalizedName().substring(5),
                         "inventory"));
     }
 }

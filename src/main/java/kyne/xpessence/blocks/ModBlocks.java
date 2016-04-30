@@ -1,6 +1,6 @@
 package kyne.xpessence.blocks;
 
-import kyne.xpessence.Reference;
+import kyne.xpessence.Constants;
 import kyne.xpessence.items.ItemBlockXPGem;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -66,7 +66,7 @@ public class ModBlocks {
     private static void registerRender(final Block block) {
         final Item blockItem = Item.getItemFromBlock(block);
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-                .register(blockItem, 0, new ModelResourceLocation(Reference.MODID + ":" + blockItem.getUnlocalizedName().substring(5),
+                .register(blockItem, 0, new ModelResourceLocation(Constants.MODID + ":" + blockItem.getUnlocalizedName().substring(5),
                         "inventory"));
     }
 }

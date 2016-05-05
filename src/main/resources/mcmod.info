@@ -2,14 +2,14 @@
 {
   "modid": "xpessence",
   "name": "XP Essence",
-  "description": "Convert Liquid Xp to Mob Essence",
-  "version": "1.0",
+  "description": "Use your experience and levels to craft new objects and items",
+  "version": "0.1",
   "mcversion": "1.8.9",
-  "url": "",
+  "url": "http://minecraft.curseforge.com/projects/xp-essence",
   "updateUrl": "",
   "authors": ["KyneSilverhide"],
   "credits": "",
-  "logoFile": "",
+  "logoFile": "http://media-elerium.cursecdn.com/avatars/39/53/635976185307210895.png",
   "screenshots": [],
   "dependencies": []
 }

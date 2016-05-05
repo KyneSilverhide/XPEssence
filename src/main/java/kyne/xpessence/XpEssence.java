@@ -1,14 +1,17 @@
 package kyne.xpessence;
 
 import kyne.xpessence.blocks.ModBlocks;
+import kyne.xpessence.gui.GUIHandler;
 import kyne.xpessence.items.ModItems;
 import kyne.xpessence.proxy.ClientProxy;
 import kyne.xpessence.proxy.CommonProxy;
 import kyne.xpessence.recipes.ModRecipes;
+import kyne.xpessence.tileentities.ModTileEntities;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import java.util.logging.Logger;
 
@@ -33,7 +36,10 @@ public class XpEssence {
         ModItems.registerItems();
         ModBlocks.registerBlocks();
 
+        ModTileEntities.registerTileEntities();
         ModRecipes.registerCraftingRecipes();
+
+        NetworkRegistry.INSTANCE.registerGuiHandler(XpEssence.instance, new GUIHandler());
     }
 
     @Mod.EventHandler

@@ -1,7 +1,6 @@
 package kyne.xpessence.blocks;
 
 import kyne.xpessence.items.ModItems;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

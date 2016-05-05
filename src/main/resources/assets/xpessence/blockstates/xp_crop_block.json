@@ -1,10 +1,22 @@
 {
   "variants": {
-    "normal": { "model": "xpessence:xp_crop_block0" },
-    "stage=0": { "model": "xpessence:xp_crop_block0" },
-    "stage=1": { "model": "xpessence:xp_crop_block1" },
-    "stage=2": { "model": "xpessence:xp_crop_block2" },
-    "stage=3": { "model": "xpessence:xp_crop_block3" },
-    "stage=4": { "model": "xpessence:xp_crop_block4" }
+    "normal": {
+      "model": "xpessence:xp_crop_block0"
+    },
+    "stage=0": {
+      "model": "xpessence:xp_crop_block0"
+    },
+    "stage=1": {
+      "model": "xpessence:xp_crop_block1"
+    },
+    "stage=2": {
+      "model": "xpessence:xp_crop_block2"
+    },
+    "stage=3": {
+      "model": "xpessence:xp_crop_block3"
+    },
+    "stage=4": {
+      "model": "xpessence:xp_crop_block4"
+    }
   }
 }

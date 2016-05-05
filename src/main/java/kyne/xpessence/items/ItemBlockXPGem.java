@@ -1,16 +1,21 @@
 package kyne.xpessence.items;
 
+import kyne.xpessence.items.base.ItemBlockXPFuel;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 
 import java.util.List;
 
-public class ItemBlockXPGem extends ItemBlock {
+public class ItemBlockXPGem extends ItemBlockXPFuel {
 
     public ItemBlockXPGem(final Block block) {
         super(block);
+    }
+
+    @Override
+    public int getFuelAmount() {
+        return 2000;
     }
 
     @Override

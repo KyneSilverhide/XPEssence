@@ -13,14 +13,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
 import java.util.Random;
-import java.util.logging.Logger;
 
 public class BasicCrop extends BlockBush implements IGrowable {
 
     public static final Integer MINSTAGE = 0;
     public static final Integer MAXSTAGE = 4;
     public static final PropertyInteger currentStage = PropertyInteger.create("stage", MINSTAGE, MAXSTAGE);
-    public static Logger logger = Logger.getLogger("XP ESSENCE");
 
     public BasicCrop() {
         this.setDefaultState(this.blockState.getBaseState().withProperty(currentStage, 0));
@@ -55,8 +53,6 @@ public class BasicCrop extends BlockBush implements IGrowable {
     }
 
     public float getGrowthChance(final Block blockIn, final World worldIn, final BlockPos pos) {
-        logger.finest("blockIn = [" + blockIn + "], worldIn = [" + worldIn + "], pos = [" + pos + "]");
-        System.out.println("blockIn = [" + blockIn + "], worldIn = [" + worldIn + "], pos = [" + pos + "]");
         float f = 1.0F;
         final BlockPos blockUnder = pos.down();
 
@@ -97,7 +93,6 @@ public class BasicCrop extends BlockBush implements IGrowable {
                 f /= 2.0F;
             }
         }
-        logger.finest("f:" + f);
         return f;
     }
 

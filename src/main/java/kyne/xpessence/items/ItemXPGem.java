@@ -1,8 +1,8 @@
 package kyne.xpessence.items;
 
+import kyne.xpessence.items.base.ItemXPFuel;
 import kyne.xpessence.tab.ModTabs;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
 
-public class ItemXPGem extends Item {
+public class ItemXPGem extends ItemXPFuel {
 
     public ItemXPGem() {
         this.setUnlocalizedName("xp_gem");
@@ -37,5 +37,10 @@ public class ItemXPGem extends Item {
     @Override
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
         list.add("Use it to gain XP");
+    }
+
+    @Override
+    public int getFuelAmount() {
+        return 200;
     }
 }

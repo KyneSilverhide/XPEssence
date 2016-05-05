@@ -20,12 +20,16 @@ public class ModBlocks {
     public static Block xpCropBlock;
     public static Block xpGemGlassBlock;
     public static Block xpGemGlassPane;
+    public static Block xpFurnaceOn;
+    public static Block xpFurnaceOff;
 
     public static void initBlocks() {
         xpGemBlock = build(new BlockXPGem(), ItemBlockXPGem.class);
         xpCropBlock = build(new BlockXPCrop());
         xpGemGlassBlock = build(new BlockXPGemGlass());
         xpGemGlassPane = build(new BlockXPGemGlassPane());
+        xpFurnaceOn = build(new BlockXPFurnace(true));
+        xpFurnaceOff = build(new BlockXPFurnace(false));
     }
 
     private static Block build(BlockXPGem block, Class<? extends ItemBlock> itemBlock) {
@@ -41,7 +45,7 @@ public class ModBlocks {
     public static void registerBlocks() {
         for (final Block modBlock : itemBlocks.keySet()) {
             final Class<? extends ItemBlock> matchingItemBlock = itemBlocks.get(modBlock);
-            if(matchingItemBlock != null) {
+            if (matchingItemBlock != null) {
                 registerItemBlock(modBlock, itemBlocks.get(modBlock));
             } else {
                 registerBlock(modBlock);
@@ -49,12 +53,12 @@ public class ModBlocks {
         }
     }
 
-    private static void registerBlock(final Block block) {
-        GameRegistry.registerBlock(block, block.getUnlocalizedName().substring(5));
+    private static void registerItemBlock(final Block block, final Class<? extends ItemBlock> item) {
+        GameRegistry.registerBlock(block, item, block.getUnlocalizedName().substring(5));
     }
 
-    private static void registerItemBlock(final Block block,final Class<? extends ItemBlock> item) {
-        GameRegistry.registerBlock(block, item, block.getUnlocalizedName().substring(5));
+    private static void registerBlock(final Block block) {
+        GameRegistry.registerBlock(block, block.getUnlocalizedName().substring(5));
     }
 
     public static void registerRenders() {

@@ -1,5 +1,7 @@
 {
   "variants": {
-    "normal": { "model": "xpessence:xp_gemglass_block" }
+    "normal": {
+      "model": "xpessence:xp_gemglass_block"
+    }
   }
 }

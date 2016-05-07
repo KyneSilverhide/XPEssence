@@ -40,7 +40,7 @@ public class ItemXPGem extends ItemXPFuel {
     }
 
     @Override
-    public int getFuelAmount() {
+    public int getInfusingPower() {
         return 200;
     }
 }

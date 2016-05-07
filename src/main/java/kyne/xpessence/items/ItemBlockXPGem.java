@@ -14,7 +14,7 @@ public class ItemBlockXPGem extends ItemBlockXPFuel {
     }
 
     @Override
-    public int getFuelAmount() {
+    public int getInfusingPower() {
         return 2000;
     }
 

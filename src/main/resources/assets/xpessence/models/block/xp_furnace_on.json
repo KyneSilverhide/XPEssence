@@ -1,8 +1,0 @@
-{
-  "parent": "block/orientable",
-  "textures": {
-    "top": "xpessence:blocks/xp_furnace_top",
-    "front": "xpessence:blocks/xp_furnace_front_on",
-    "side": "xpessence:blocks/xp_furnace_side"
-  }
-}

@@ -4,5 +4,5 @@ import net.minecraft.item.Item;
 
 public abstract class ItemXPFuel extends Item {
 
-    public abstract int getFuelAmount();
+    public abstract int getInfusingPower();
 }

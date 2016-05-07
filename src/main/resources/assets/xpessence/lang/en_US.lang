@@ -6,9 +6,9 @@ tile.xp_gem_block.name=Experience Gem Block
 tile.xp_gemglass_block.name=Experience Gem Glass
 tile.xp_crop_block.name=Experience Crop
 tile.xp_gemglass_pane.name=Experience Gem Glass Pane
-tile.xp_furnace_on.name=Experience Furnace (burning)
-tile.xp_furnace_off.name=Experience Furnace
+tile.xp_infuser_on.name=Experience Infuser (burning)
+tile.xp_infuser_off.name=Experience Infuser
 
 itemGroup.xp_essence_tab=XP Essence
 
-container.xp_furnace.name=Experience Furnace
+container.xp_infuser.name=Experience Infuser

@@ -20,19 +20,19 @@ public class ModBlocks {
     public static Block xpCropBlock;
     public static Block xpGemGlassBlock;
     public static Block xpGemGlassPane;
-    public static Block xpFurnaceOn;
-    public static Block xpFurnaceOff;
+    public static Block xpInfuserOn;
+    public static Block xpInfuserOff;
 
     public static void initBlocks() {
         xpGemBlock = build(new BlockXPGem(), ItemBlockXPGem.class);
         xpCropBlock = build(new BlockXPCrop());
         xpGemGlassBlock = build(new BlockXPGemGlass());
         xpGemGlassPane = build(new BlockXPGemGlassPane());
-        xpFurnaceOn = build(new BlockXPFurnace(true));
-        xpFurnaceOff = build(new BlockXPFurnace(false));
+        xpInfuserOn = build(new BlockInfuser(true));
+        xpInfuserOff = build(new BlockInfuser(false));
     }
 
-    private static Block build(BlockXPGem block, Class<? extends ItemBlock> itemBlock) {
+    private static Block build(final BlockXPGem block, final Class<? extends ItemBlock> itemBlock) {
         itemBlocks.put(block, itemBlock);
         return block;
     }

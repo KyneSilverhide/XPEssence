@@ -9,5 +9,5 @@ public abstract class ItemBlockXPFuel extends ItemBlock {
         super(block);
     }
 
-    public abstract int getFuelAmount();
+    public abstract int getInfusingPower();
 }

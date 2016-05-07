@@ -2,7 +2,7 @@ package kyne.xpessence.containers;
 
 import kyne.xpessence.items.base.ItemBlockXPFuel;
 import kyne.xpessence.items.base.ItemXPFuel;
-import kyne.xpessence.recipes.ModSmeltingRecipes;
+import kyne.xpessence.recipes.ModInfusingRecipes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -23,8 +23,8 @@ public class ContainerXPFurnace extends Container {
 
     public ContainerXPFurnace(InventoryPlayer playerInventory, IInventory furnaceInventory) {
         this.tileFurnace = furnaceInventory;
-        this.addSlotToContainer(new SlotXPSmeltable(furnaceInventory, 0, 56, 17));
-        this.addSlotToContainer(new SlotXPFuel(furnaceInventory, 1, 56, 53));
+        this.addSlotToContainer(new Slot(furnaceInventory, 0, 56, 17));
+        this.addSlotToContainer(new Slot(furnaceInventory, 1, 56, 53));
         this.addSlotToContainer(new SlotXPOutput(furnaceInventory, 2, 116, 35));
 
         addPlayerInventory(playerInventory);
@@ -110,7 +110,7 @@ public class ContainerXPFurnace extends Container {
 
                 slot.onSlotChange(itemstack1, itemstack);
             } else if (index != 1 && index != 0) {
-                if (ModSmeltingRecipes.getSmeltingResult(itemstack1) != null) {
+                if (ModInfusingRecipes.getInfusingResults(itemstack1) != null) {
                     if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
                         return null;
                     }

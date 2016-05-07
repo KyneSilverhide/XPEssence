@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "xpessence:blocks/xp_infuser_top",
+    "front": "xpessence:blocks/xp_infuser_front_off",
+    "side": "xpessence:blocks/xp_infuser_side"
+  }
+}

@@ -5,6 +5,6 @@ public class ModRecipes {
     public static void registerCraftingRecipes() {
         ModShapedRecipes.buildShapedRecipes();
         ModShapelessRecipes.buildShapelessRecipes();
-        ModSmeltingRecipes.buildSmeltingRecipes();
+        ModInfusingRecipes.buildSmeltingRecipes();
     }
 }

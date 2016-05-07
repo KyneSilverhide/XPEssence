@@ -1,27 +1,30 @@
 package kyne.xpessence.recipes;
 
 import com.google.common.collect.Maps;
+import kyne.xpessence.blocks.ModBlocks;
 import kyne.xpessence.items.ModItems;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 
 import java.util.Map;
 
-public class ModSmeltingRecipes {
+public class ModInfusingRecipes {
 
     private static final int METADATA_WILDCARD_VALUE = 32767;
-    private static Map<ItemStack, ItemStack> smeltingList = Maps.newHashMap();
+    private static final Map<ItemStack, ItemStack> smeltingList = Maps.newHashMap();
 
     public static void buildSmeltingRecipes() {
         addSmeltingRecipe(new ItemStack(Items.wheat_seeds), new ItemStack(ModItems.xpSeeds));
+        addSmeltingRecipe(new ItemStack(Blocks.glass), new ItemStack(ModBlocks.xpGemGlassBlock));
     }
 
-    private static void addSmeltingRecipe(ItemStack input, ItemStack output) {
+    private static void addSmeltingRecipe(final ItemStack input, final ItemStack output) {
         smeltingList.put(input, output);
     }
 
-    public static ItemStack getSmeltingResult(ItemStack stack) {
-        for (Map.Entry<ItemStack, ItemStack> entry : smeltingList.entrySet()) {
+    public static ItemStack getInfusingResults(final ItemStack stack) {
+        for (final Map.Entry<ItemStack, ItemStack> entry : smeltingList.entrySet()) {
             if (compareItemStacks(stack, entry.getKey())) {
                 return entry.getValue();
             }
@@ -29,9 +32,8 @@ public class ModSmeltingRecipes {
         return null;
     }
 
-    private static boolean compareItemStacks(ItemStack stack1, ItemStack stack2) {
+    private static boolean compareItemStacks(final ItemStack stack1, final ItemStack stack2) {
         return stack2.getItem() == stack1.getItem()
                 && (stack2.getMetadata() == METADATA_WILDCARD_VALUE || stack2.getMetadata() == stack1.getMetadata());
     }
-
 }

@@ -15,14 +15,14 @@ public class BlockXPGemGlass extends Block {
 
     public BlockXPGemGlass() {
         super(Material.glass);
-        this.setUnlocalizedName("xp_gemglass_block")
-                .setCreativeTab(ModTabs.creativeTab)
-                .setLightLevel(0.7F)
-                .setHardness(1F)
-                .setStepSound(Block.soundTypeGlass)
-                .setResistance(5F)
-                .setLightOpacity(0)
-                .setHarvestLevel("pickaxe", 1);
+        this.setUnlocalizedName("xp_gemglass_block");
+        this.setCreativeTab(ModTabs.creativeTab);
+        this.setLightLevel(0.7F);
+        this.setHardness(1F);
+        this.setStepSound(Block.soundTypeGlass);
+        this.setResistance(5F);
+        this.setLightOpacity(0);
+        this.setHarvestLevel("pickaxe", 1);
     }
 
     @Override
@@ -41,8 +41,9 @@ public class BlockXPGemGlass extends Block {
         final IBlockState iblockstate = worldIn.getBlockState(pos);
         final Block block = iblockstate.getBlock();
         // Taken from BlockBreakable implementation (ex: Glass)
-        return worldIn.getBlockState(pos.offset(side.getOpposite())) != iblockstate
-                || block != this && block != this && super.shouldSideBeRendered(worldIn, pos, side);
+        return worldIn.getBlockState(pos.offset(
+                side.getOpposite())) != iblockstate || block != this && block != this && super.shouldSideBeRendered(
+                worldIn, pos, side);
 
     }
 }

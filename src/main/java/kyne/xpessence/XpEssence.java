@@ -7,6 +7,8 @@ import kyne.xpessence.proxy.ClientProxy;
 import kyne.xpessence.proxy.CommonProxy;
 import kyne.xpessence.recipes.ModRecipes;
 import kyne.xpessence.tileentities.ModTileEntities;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -39,6 +41,7 @@ public class XpEssence {
         ModTileEntities.registerTileEntities();
         ModRecipes.registerCraftingRecipes();
 
+        MinecraftForge.addGrassSeed(new ItemStack(ModItems.devitalizedSeeds), 1);
         NetworkRegistry.INSTANCE.registerGuiHandler(XpEssence.instance, new GUIHandler());
     }
 

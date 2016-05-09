@@ -14,7 +14,8 @@ import java.util.Map;
 
 public class ModBlocks {
 
-    private static final Map<Block, Class<? extends ItemBlock>> itemBlocks = new HashMap<Block, Class<? extends ItemBlock>>();
+    private static final Map<Block, Class<? extends ItemBlock>> itemBlocks = new HashMap<Block, Class<? extends
+            ItemBlock>>();
 
     public static Block xpGemBlock;
     public static Block xpCropBlock;
@@ -69,8 +70,8 @@ public class ModBlocks {
 
     private static void registerRender(final Block block) {
         final Item blockItem = Item.getItemFromBlock(block);
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-                .register(blockItem, 0, new ModelResourceLocation(Constants.MODID + ":" + blockItem.getUnlocalizedName().substring(5),
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(blockItem, 0,
+                new ModelResourceLocation(Constants.MODID + ":" + blockItem.getUnlocalizedName().substring(5),
                         "inventory"));
     }
 }

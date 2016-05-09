@@ -15,11 +15,13 @@ public class ModItems {
     public static Item xpGem;
     public static Item xpApple;
     public static Item xpSeeds;
+    public static Item devitalizedSeeds;
 
     public static void initItems() {
         xpGem = build(new ItemXPGem());
         xpApple = build(new ItemXPApple());
         xpSeeds = build(new ItemXPSeed());
+        devitalizedSeeds = build(new ItemDevitalizedSeed());
     }
 
     private static Item build(final Item item) {
@@ -44,8 +46,7 @@ public class ModItems {
     }
 
     private static void registerRender(final Item item) {
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher()
-                .register(item, 0, new ModelResourceLocation(Constants.MODID + ":" + item.getUnlocalizedName().substring(5),
-                        "inventory"));
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(item, 0,
+                new ModelResourceLocation(Constants.MODID + ":" + item.getUnlocalizedName().substring(5), "inventory"));
     }
 }

@@ -10,14 +10,9 @@ public class BlockXPGem extends Block {
 
     public BlockXPGem() {
         super(Material.ice);
-        this.setUnlocalizedName("xp_gem_block")
-                .setCreativeTab(ModTabs.creativeTab)
-                .setLightLevel(0.7F)
-                .setHardness(3F)
-                .setStepSound(Block.soundTypeMetal)
-                .setResistance(15F)
-                .setLightOpacity(8)
-                .setHarvestLevel("pickaxe", 1);
+        this.setUnlocalizedName("xp_gem_block").setCreativeTab(ModTabs.creativeTab).setLightLevel(0.7F).setHardness(
+                3F).setStepSound(Block.soundTypeMetal).setResistance(15F).setLightOpacity(8).setHarvestLevel("pickaxe",
+                1);
     }
 
     @Override

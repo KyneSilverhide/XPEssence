@@ -1,11 +1,12 @@
 item.xp_gem.name=Experience gem
-item.xp_apple.name=Experience apple
-item.xp_seed.name=Experience seed
+item.xp_apple.name=Infused apple
+item.xp_seed.name=Infused seeds
+item.devitalized_seed.name=Devitalized seeds
 
 tile.xp_gem_block.name=Experience Gem Block
-tile.xp_gemglass_block.name=Experience Gem Glass
+tile.xp_gemglass_block.name=Infused Gem Glass
 tile.xp_crop_block.name=Experience Crop
-tile.xp_gemglass_pane.name=Experience Gem Glass Pane
+tile.xp_gemglass_pane.name=Infused Gem Glass Pane
 tile.xp_infuser_on.name=Experience Infuser (burning)
 tile.xp_infuser_off.name=Experience Infuser
 

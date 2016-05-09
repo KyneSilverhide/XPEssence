@@ -5,7 +5,7 @@ import net.minecraft.item.ItemBlock;
 
 public abstract class ItemBlockXPFuel extends ItemBlock {
 
-    public ItemBlockXPFuel(Block block) {
+    public ItemBlockXPFuel(final Block block) {
         super(block);
     }
 

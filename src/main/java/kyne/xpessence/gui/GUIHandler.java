@@ -12,8 +12,8 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 public class GUIHandler implements IGuiHandler {
 
     @Override
-    public Object getServerGuiElement(final int ID, final EntityPlayer player, final World world, final int x, final
-    int y, final int z) {
+    public Object getServerGuiElement(final int ID, final EntityPlayer player, final World world, final int x,
+                                      final int y, final int z) {
         final BlockPos xyz = new BlockPos(x, y, z);
         final TileEntity tileEntity = world.getTileEntity(xyz);
         if (tileEntity != null) {

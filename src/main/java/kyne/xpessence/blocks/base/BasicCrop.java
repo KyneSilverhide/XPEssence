@@ -1,4 +1,4 @@
-package kyne.xpessence.blocks;
+package kyne.xpessence.blocks.base;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -61,7 +61,8 @@ public class BasicCrop extends BlockBush implements IGrowable {
                 float f1 = 0.0F;
                 final IBlockState iblockstate = worldIn.getBlockState(blockUnder.add(i, 0, j));
 
-                if (iblockstate.getBlock().canSustainPlant(worldIn, blockUnder.add(i, 0, j), EnumFacing.UP, (IPlantable) blockIn)) {
+                if (iblockstate.getBlock().canSustainPlant(worldIn, blockUnder.add(i, 0, j), EnumFacing.UP,
+                        (IPlantable) blockIn)) {
                     f1 = 1.0F;
                     if (iblockstate.getBlock().isFertile(worldIn, blockUnder.add(i, 0, j))) {
                         f1 = 3.0F;
@@ -78,16 +79,18 @@ public class BasicCrop extends BlockBush implements IGrowable {
         final BlockPos blockSouth = pos.south();
         final BlockPos blockWest = pos.west();
         final BlockPos blockEast = pos.east();
-        final boolean flag = blockIn == worldIn.getBlockState(blockWest).getBlock() || blockIn == worldIn.getBlockState(blockEast).getBlock();
-        final boolean flag1 = blockIn == worldIn.getBlockState(blockNorth).getBlock() || blockIn == worldIn.getBlockState(blockSouth).getBlock();
+        final boolean flag = blockIn == worldIn.getBlockState(blockWest).getBlock() || blockIn == worldIn.getBlockState(
+                blockEast).getBlock();
+        final boolean flag1 = blockIn == worldIn.getBlockState(
+                blockNorth).getBlock() || blockIn == worldIn.getBlockState(blockSouth).getBlock();
 
         if (flag && flag1) {
             f /= 2.0F;
         } else {
-            final boolean flag2 = blockIn == worldIn.getBlockState(blockWest.north()).getBlock()
-                    || blockIn == worldIn.getBlockState(blockEast.north()).getBlock()
-                    || blockIn == worldIn.getBlockState(blockEast.south()).getBlock()
-                    || blockIn == worldIn.getBlockState(blockWest.south()).getBlock();
+            final boolean flag2 = blockIn == worldIn.getBlockState(
+                    blockWest.north()).getBlock() || blockIn == worldIn.getBlockState(
+                    blockEast.north()).getBlock() || blockIn == worldIn.getBlockState(
+                    blockEast.south()).getBlock() || blockIn == worldIn.getBlockState(blockWest.south()).getBlock();
 
             if (flag2) {
                 f /= 2.0F;

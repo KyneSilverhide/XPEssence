@@ -15,26 +15,16 @@ public class ModShapedRecipes {
     }
 
     private static void xpGemToBlock() {
-        GameRegistry.addShapedRecipe(
-                new ItemStack(ModBlocks.xpGemBlock),
-                "xxx",
-                "xxx",
-                "xxx",
-                'x', ModItems.xpGem);
+        GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.xpGemBlock), "xxx", "xxx", "xxx", 'x', ModItems.xpGem);
     }
 
     private static void xpGemToGlass() {
-        GameRegistry.addShapedRecipe(
-                new ItemStack(ModBlocks.xpGemGlassBlock, 2),
-                "xgx",
-                'x', Blocks.glass, 'g', ModItems.xpGem);
+        GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.xpGemGlassBlock, 2), "xgx", 'x', Blocks.glass, 'g',
+                ModItems.xpGem);
     }
 
     private static void xpGlassToXpGlassPane() {
-        GameRegistry.addShapedRecipe(
-                new ItemStack(ModBlocks.xpGemGlassPane, 16),
-                "ggg",
-                "ggg",
-                'g', ModBlocks.xpGemGlassBlock);
+        GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.xpGemGlassPane, 16), "ggg", "ggg", 'g',
+                ModBlocks.xpGemGlassBlock);
     }
 }

@@ -1,196 +1,113 @@
 package kyne.xpessence.tileentities;
 
+import kyne.xpessence.Constants;
 import kyne.xpessence.blocks.BlockInfuser;
 import kyne.xpessence.containers.ContainerInfuser;
 import kyne.xpessence.items.base.ItemBlockXPFuel;
 import kyne.xpessence.items.base.ItemXPFuel;
 import kyne.xpessence.recipes.ModInfusingRecipes;
-import net.minecraft.block.state.IBlockState;
+import kyne.xpessence.tileentities.base.BasicTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.tileentity.TileEntityLockable;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
 
 
-public class TileEntityInfuser extends TileEntityLockable implements ISidedInventory, ITickable {
+public class TileEntityInfuser extends BasicTileEntity {
 
     public static final int INPUT_SLOT = 0;
     public static final int FUEL_SLOT = 1;
     public static final int OUTPUT_SLOT = 2;
 
+    public static final int INFUSING_FUEL_LEFT = 0;
+    public static final int CURRENT_ITEM_BURN_TIME = 1;
+    public static final int ITEM_INFUSING_STATUS = 2;
+    public static final int TIME_TO_INFUSE_ITEM = 3;
+    public static final int ITEM_INFUSING_TIME = 200;
+
     private static final int[] slotsTop = new int[]{INPUT_SLOT};
     private static final int[] slotsBottom = new int[]{FUEL_SLOT};
     private static final int[] slotsSides = new int[]{OUTPUT_SLOT};
 
-    private static final int ITEM_BURN_TIME = 200;
-
-    private ItemStack[] infuserItemStacks = new ItemStack[3];
-
-    private int furnaceBurnTime;
+    private int infusingFuelLeft;
     private int currentItemBurnTime;
-    private int cookTime;
-    private int totalCookTime;
+    private int itemInfusingStatus;
+    private int timeToInfuseItem;
 
-    private String infuserCustomName;
-
-    /**
-     * This controls whether the tile entity gets replaced whenever the block state is changed.
-     * Normally only want this when block actually is replaced.
-     */
-    @Override
-    public boolean shouldRefresh(final World world, final BlockPos pos, final IBlockState oldState,
-                                 final IBlockState newSate) {
-        return (oldState.getBlock() != newSate.getBlock());
+    public TileEntityInfuser() {
+        super(new ItemStack[3]);
     }
 
-    /**
-     * Returns the number of slots in the inventory.
-     */
-    @Override
-    public int getSizeInventory() {
-        return infuserItemStacks.length;
-    }
-
-    /**
-     * Returns the stack in slot i
-     */
-    @Override
-    public ItemStack getStackInSlot(final int index) {
-        return infuserItemStacks[index];
-    }
-
-    /**
-     * Removes from an inventory slot (first arg) up to a specified number (second arg) of items and returns them in a
-     * new stack.
-     */
-    @Override
-    public ItemStack decrStackSize(final int index, final int count) {
-        if (infuserItemStacks[index] != null) {
-            final ItemStack itemstack;
-
-            if (infuserItemStacks[index].stackSize <= count) {
-                itemstack = infuserItemStacks[index];
-                infuserItemStacks[index] = null;
-                return itemstack;
-            } else {
-                itemstack = infuserItemStacks[index].splitStack(count);
-
-                if (infuserItemStacks[index].stackSize == 0) {
-                    infuserItemStacks[index] = null;
-                }
-
-                return itemstack;
-            }
-        } else {
-            return null;
-        }
-    }
-
-    public ItemStack removeStackFromSlot(final int index) {
-        if (this.infuserItemStacks[index] != null) {
-            final ItemStack itemstack = this.infuserItemStacks[index];
-            this.infuserItemStacks[index] = null;
-            return itemstack;
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
-     */
     @Override
     public void setInventorySlotContents(final int index, final ItemStack stack) {
-        final boolean isSameItemStackAlreadyInSlot = stack != null && stack.isItemEqual(infuserItemStacks[index]) && ItemStack.areItemStackTagsEqual(stack, infuserItemStacks[index]);
-        infuserItemStacks[index] = stack;
+        final boolean isSameItemStackAlreadyInSlot = stack != null && stack.isItemEqual(
+                getTileEntityItemStacks()[index]) && ItemStack.areItemStackTagsEqual(stack,
+                getTileEntityItemStacks()[index]);
+        getTileEntityItemStacks()[index] = stack;
 
         if (stack != null && stack.stackSize > getInventoryStackLimit()) {
             stack.stackSize = getInventoryStackLimit();
         }
 
         if (index == INPUT_SLOT && !isSameItemStackAlreadyInSlot) {
-            this.totalCookTime = ITEM_BURN_TIME;
-            this.cookTime = 0;
+            this.timeToInfuseItem = ITEM_INFUSING_TIME;
+            this.itemInfusingStatus = 0;
             markDirty();
         }
     }
 
     @Override
     public String getName() {
-        return "container.xp_infuser";
-    }
-
-    /**
-     * Returns true if this thing is named
-     */
-    @Override
-    public boolean hasCustomName() {
-        return infuserCustomName != null && infuserCustomName.length() > 0;
+        return "container.xp_infuser.name";
     }
 
     public void readFromNBT(final NBTTagCompound compound) {
         super.readFromNBT(compound);
         final NBTTagList nbttaglist = compound.getTagList("Items", 10);
-        this.infuserItemStacks = new ItemStack[this.getSizeInventory()];
+        setTileEntityItemStacks(new ItemStack[this.getSizeInventory()]);
 
         for (int i = 0; i < nbttaglist.tagCount(); ++i) {
             final NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
             final int j = nbttagcompound.getByte("Slot");
 
-            if (j >= 0 && j < this.infuserItemStacks.length) {
-                this.infuserItemStacks[j] = ItemStack.loadItemStackFromNBT(nbttagcompound);
+            if (j >= 0 && j < this.getTileEntityItemStacks().length) {
+                this.getTileEntityItemStacks()[j] = ItemStack.loadItemStackFromNBT(nbttagcompound);
             }
         }
 
-        this.furnaceBurnTime = compound.getShort("BurnTime");
-        this.cookTime = compound.getShort("CookTime");
-        this.totalCookTime = compound.getShort("CookTimeTotal");
-        this.currentItemBurnTime = ITEM_BURN_TIME;
+        this.infusingFuelLeft = compound.getShort("InfusingFuelLeft");
+        this.itemInfusingStatus = compound.getShort("ItemInfusingStatus");
+        this.timeToInfuseItem = compound.getShort("TimeToInfuseItem");
+        this.currentItemBurnTime = ITEM_INFUSING_TIME;
 
         if (compound.hasKey("CustomName", 8)) {
-            this.infuserCustomName = compound.getString("CustomName");
+            setCustomName(compound.getString("CustomName"));
         }
     }
 
     public void writeToNBT(final NBTTagCompound compound) {
         super.writeToNBT(compound);
-        compound.setShort("BurnTime", (short) this.furnaceBurnTime);
-        compound.setShort("CookTime", (short) this.cookTime);
-        compound.setShort("CookTimeTotal", (short) this.totalCookTime);
+        compound.setShort("InfusingFuelLeft", (short) this.infusingFuelLeft);
+        compound.setShort("ItemInfusingStatus", (short) this.itemInfusingStatus);
+        compound.setShort("TimeToInfuseItem", (short) this.timeToInfuseItem);
         final NBTTagList nbttaglist = new NBTTagList();
 
-        for (int i = 0; i < this.infuserItemStacks.length; ++i) {
-            if (this.infuserItemStacks[i] != null) {
+        for (int i = 0; i < this.getTileEntityItemStacks().length; ++i) {
+            if (this.getTileEntityItemStacks()[i] != null) {
                 final NBTTagCompound nbttagcompound = new NBTTagCompound();
                 nbttagcompound.setByte("Slot", (byte) i);
-                this.infuserItemStacks[i].writeToNBT(nbttagcompound);
+                this.getTileEntityItemStacks()[i].writeToNBT(nbttagcompound);
                 nbttaglist.appendTag(nbttagcompound);
             }
         }
-
         compound.setTag("Items", nbttaglist);
-
         if (this.hasCustomName()) {
-            compound.setString("CustomName", this.infuserCustomName);
+            compound.setString("CustomName", this.getCustomName());
         }
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    public boolean isInfusing() {
-        return furnaceBurnTime > 0;
     }
 
     @Override
@@ -199,42 +116,42 @@ public class TileEntityInfuser extends TileEntityLockable implements ISidedInven
         boolean needsUpdate = false;
         final boolean wasInfusing = isInfusing();
 
-        final ItemStack inputItem = infuserItemStacks[INPUT_SLOT];
-        final ItemStack fuelItem = infuserItemStacks[FUEL_SLOT];
-        final ItemStack outputItem = infuserItemStacks[OUTPUT_SLOT];
+        final ItemStack inputItem = getTileEntityItemStacks()[INPUT_SLOT];
+        final ItemStack fuelItem = getTileEntityItemStacks()[FUEL_SLOT];
+        final ItemStack outputItem = getTileEntityItemStacks()[OUTPUT_SLOT];
 
         if (this.isInfusing()) {
-            --this.furnaceBurnTime;
+            --this.infusingFuelLeft;
         }
 
         if (!this.worldObj.isRemote) {
             if (this.isInfusing() || inputItem != null && fuelItem != null) {
                 if (!this.isInfusing() && this.canInfuseInputToOutput(inputItem, outputItem)) {
-                    this.currentItemBurnTime = this.furnaceBurnTime = getInfusingPower(fuelItem);
+                    this.currentItemBurnTime = this.infusingFuelLeft = getInfusingPower(fuelItem);
 
                     if (this.isInfusing()) {
                         needsUpdate = true;
                         fuelItem.stackSize--;
                         if (fuelItem.stackSize == 0) {
-                            this.infuserItemStacks[FUEL_SLOT] = null;
+                            this.getTileEntityItemStacks()[FUEL_SLOT] = null;
                         }
                     }
                 }
 
                 if (this.isInfusing() && this.canInfuseInputToOutput(inputItem, outputItem)) {
-                    ++this.cookTime;
+                    this.itemInfusingStatus++;
 
-                    if (this.cookTime == this.totalCookTime) {
-                        this.cookTime = 0;
-                        this.totalCookTime = this.getInfusingPower(fuelItem);
+                    if (this.itemInfusingStatus == this.timeToInfuseItem) {
+                        this.itemInfusingStatus = 0;
+                        this.timeToInfuseItem = ITEM_INFUSING_TIME;
                         this.infuseItem(inputItem, outputItem);
                         needsUpdate = true;
                     }
                 } else {
-                    this.cookTime = 0;
+                    this.itemInfusingStatus = 0;
                 }
-            } else if (!this.isInfusing() && this.cookTime > 0) {
-                this.cookTime = MathHelper.clamp_int(this.cookTime - 2, 0, this.totalCookTime);
+            } else if (!this.isInfusing() && this.itemInfusingStatus > 0) {
+                this.itemInfusingStatus = MathHelper.clamp_int(this.itemInfusingStatus - 2, 0, this.timeToInfuseItem);
             }
 
             if (wasInfusing != this.isInfusing()) {
@@ -248,22 +165,15 @@ public class TileEntityInfuser extends TileEntityLockable implements ISidedInven
         }
     }
 
-    private int getInfusingPower(final ItemStack fuelItemStack) {
-        if(fuelItemStack != null) {
-            if (fuelItemStack.getItem() instanceof ItemXPFuel) {
-                return ((ItemXPFuel) fuelItemStack.getItem()).getInfusingPower();
-            } else if (fuelItemStack.getItem() instanceof ItemBlockXPFuel) {
-                return ((ItemBlockXPFuel) fuelItemStack.getItem()).getInfusingPower();
-            }
-        }
-        return 0;
+    public boolean isInfusing() {
+        return infusingFuelLeft > 0;
     }
 
     private boolean canInfuseInputToOutput(final ItemStack input, final ItemStack output) {
         if (input == null) {
             return false;
         } else {
-            final ItemStack futureInfusedItem = ModInfusingRecipes.getInfusingResults(infuserItemStacks[INPUT_SLOT]);
+            final ItemStack futureInfusedItem = ModInfusingRecipes.getInfusingResults(input);
             if (futureInfusedItem == null) {
                 return false;
             }
@@ -278,41 +188,35 @@ public class TileEntityInfuser extends TileEntityLockable implements ISidedInven
         }
     }
 
+    private int getInfusingPower(final ItemStack fuelItemStack) {
+        if (fuelItemStack != null) {
+            if (fuelItemStack.getItem() instanceof ItemXPFuel) {
+                return ((ItemXPFuel) fuelItemStack.getItem()).getInfusingPower();
+            } else if (fuelItemStack.getItem() instanceof ItemBlockXPFuel) {
+                return ((ItemBlockXPFuel) fuelItemStack.getItem()).getInfusingPower();
+            }
+        }
+        return 0;
+    }
+
     public void infuseItem(final ItemStack inputItem, final ItemStack outputItem) {
         if (canInfuseInputToOutput(inputItem, outputItem)) {
-            final ItemStack futureInfusedItem = ModInfusingRecipes.getInfusingResults(infuserItemStacks[INPUT_SLOT]);
+            final ItemStack futureInfusedItem = ModInfusingRecipes.getInfusingResults(
+                    getTileEntityItemStacks()[INPUT_SLOT]);
             if (futureInfusedItem != null) {
                 if (outputItem == null) {
-                    infuserItemStacks[OUTPUT_SLOT] = futureInfusedItem.copy();
+                    getTileEntityItemStacks()[OUTPUT_SLOT] = futureInfusedItem.copy();
                 } else if (outputItem.getItem() == futureInfusedItem.getItem()) {
-                    infuserItemStacks[OUTPUT_SLOT].stackSize += futureInfusedItem.stackSize; // Forge BugFix: Results may have multiple items
+                    getTileEntityItemStacks()[OUTPUT_SLOT].stackSize += futureInfusedItem.stackSize;
+                    // Forge BugFix: Results may have multiple items
                 }
 
-                --inputItem.stackSize;
+                inputItem.stackSize--;
                 if (inputItem.stackSize <= 0) {
-                    infuserItemStacks[INPUT_SLOT] = null;
+                    getTileEntityItemStacks()[INPUT_SLOT] = null;
                 }
             }
         }
-    }
-
-    @Override
-    public boolean isUseableByPlayer(final EntityPlayer playerIn) {
-        return worldObj.getTileEntity(pos) == this && playerIn.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D,
-                pos.getZ() + 0.5D) <= 64.0D;
-    }
-
-    @Override
-    public void openInventory(final EntityPlayer playerIn) {
-    }
-
-    @Override
-    public void closeInventory(final EntityPlayer playerIn) {
-    }
-
-    @Override
-    public boolean isItemValidForSlot(final int index, final ItemStack stack) {
-        return index == INPUT_SLOT;
     }
 
     @Override
@@ -326,13 +230,18 @@ public class TileEntityInfuser extends TileEntityLockable implements ISidedInven
     }
 
     @Override
+    public boolean isItemValidForSlot(final int index, final ItemStack stack) {
+        return index == INPUT_SLOT;
+    }
+
+    @Override
     public boolean canExtractItem(final int parSlotIndex, final ItemStack parStack, final EnumFacing parFacing) {
         return true;
     }
 
     @Override
     public String getGuiID() {
-        return "xpessence:xp_infuser";
+        return Constants.MODID + ":xp_infuser";
     }
 
     @Override
@@ -343,14 +252,14 @@ public class TileEntityInfuser extends TileEntityLockable implements ISidedInven
     @Override
     public int getField(final int id) {
         switch (id) {
-            case 0:
-                return this.furnaceBurnTime;
-            case 1:
+            case INFUSING_FUEL_LEFT:
+                return this.infusingFuelLeft;
+            case CURRENT_ITEM_BURN_TIME:
                 return this.currentItemBurnTime;
-            case 2:
-                return this.cookTime;
-            case 3:
-                return this.totalCookTime;
+            case ITEM_INFUSING_STATUS:
+                return this.itemInfusingStatus;
+            case TIME_TO_INFUSE_ITEM:
+                return this.timeToInfuseItem;
             default:
                 return 0;
         }
@@ -359,29 +268,17 @@ public class TileEntityInfuser extends TileEntityLockable implements ISidedInven
     @Override
     public void setField(final int id, final int value) {
         switch (id) {
-            case 0:
-                this.furnaceBurnTime = value;
+            case INFUSING_FUEL_LEFT:
+                this.infusingFuelLeft = value;
                 break;
-            case 1:
+            case CURRENT_ITEM_BURN_TIME:
                 this.currentItemBurnTime = value;
                 break;
-            case 2:
-                this.cookTime = value;
+            case ITEM_INFUSING_STATUS:
+                this.itemInfusingStatus = value;
                 break;
-            case 3:
-                this.totalCookTime = value;
-        }
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 4;
-    }
-
-    @Override
-    public void clear() {
-        for (int i = 0; i < infuserItemStacks.length; ++i) {
-            infuserItemStacks[i] = null;
+            case TIME_TO_INFUSE_ITEM:
+                this.timeToInfuseItem = value;
         }
     }
 }

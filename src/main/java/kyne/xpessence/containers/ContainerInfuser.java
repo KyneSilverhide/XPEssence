@@ -1,47 +1,35 @@
 package kyne.xpessence.containers;
 
+import kyne.xpessence.containers.base.BasicContainer;
 import kyne.xpessence.recipes.ModInfusingRecipes;
+import kyne.xpessence.slots.FuelSlot;
+import kyne.xpessence.slots.InfusingSlot;
+import kyne.xpessence.slots.OutputSlot;
 import kyne.xpessence.tileentities.TileEntityInfuser;
+import kyne.xpessence.utils.FuelUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ContainerInfuser extends Container {
-    private final IInventory tileFurnace;
+public class ContainerInfuser extends BasicContainer {
+
     private final int sizeInventory;
     private int ticksGrindingItemSoFar;
     private int ticksPerItem;
     private int timeCanGrind;
 
     public ContainerInfuser(final InventoryPlayer playerInventory, final IInventory furnaceInventory) {
-        this.tileFurnace = furnaceInventory;
-        this.sizeInventory = tileFurnace.getSizeInventory();
-        this.addSlotToContainer(new Slot(furnaceInventory, 0, 56, 17));
-        this.addSlotToContainer(new Slot(furnaceInventory, 1, 56, 53));
-        this.addSlotToContainer(new SlotXPOutput(furnaceInventory, 2, 116, 35));
+        super(playerInventory, furnaceInventory);
+        this.sizeInventory = getTileFurnace().getSizeInventory();
+        this.addSlotToContainer(new InfusingSlot(furnaceInventory, 0, 56, 17));
+        this.addSlotToContainer(new FuelSlot(furnaceInventory, 1, 56, 53));
+        this.addSlotToContainer(new OutputSlot(furnaceInventory, 2, 116, 35));
 
         addPlayerInventory(playerInventory);
         addPlayerToolbar(playerInventory);
-    }
-
-    private void addPlayerToolbar(final InventoryPlayer playerInventory) {
-        for (int k = 0; k < 9; ++k) {
-            this.addSlotToContainer(new Slot(playerInventory, k, 8 + k * 18, 142));
-        }
-    }
-
-    private void addPlayerInventory(final InventoryPlayer playerInventory) {
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 9; ++j) {
-                this.addSlotToContainer(new Slot(playerInventory, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
-            }
-        }
     }
 
     /**
@@ -52,33 +40,25 @@ public class ContainerInfuser extends Container {
         super.detectAndSendChanges();
 
         for (final ICrafting icrafting : crafters) {
-            if (ticksGrindingItemSoFar != tileFurnace.getField(2)) {
-                icrafting.sendProgressBarUpdate(this, 2, tileFurnace.getField(2));
+            if (ticksGrindingItemSoFar != getTileFurnace().getField(TileEntityInfuser.ITEM_INFUSING_STATUS)) {
+                icrafting.sendProgressBarUpdate(this, TileEntityInfuser.ITEM_INFUSING_STATUS,
+                        getTileFurnace().getField(TileEntityInfuser.ITEM_INFUSING_STATUS));
             }
 
-            if (timeCanGrind != tileFurnace.getField(0)) {
-                icrafting.sendProgressBarUpdate(this, 0, tileFurnace.getField(0));
+            if (timeCanGrind != getTileFurnace().getField(TileEntityInfuser.INFUSING_FUEL_LEFT)) {
+                icrafting.sendProgressBarUpdate(this, TileEntityInfuser.INFUSING_FUEL_LEFT,
+                        getTileFurnace().getField(TileEntityInfuser.INFUSING_FUEL_LEFT));
             }
 
-            if (ticksPerItem != tileFurnace.getField(3)) {
-                icrafting.sendProgressBarUpdate(this, 3, tileFurnace.getField(3));
+            if (ticksPerItem != getTileFurnace().getField(TileEntityInfuser.TIME_TO_INFUSE_ITEM)) {
+                icrafting.sendProgressBarUpdate(this, TileEntityInfuser.TIME_TO_INFUSE_ITEM,
+                        getTileFurnace().getField(TileEntityInfuser.TIME_TO_INFUSE_ITEM));
             }
         }
 
-        ticksGrindingItemSoFar = tileFurnace.getField(2);
-        timeCanGrind = tileFurnace.getField(0);
-        ticksPerItem = tileFurnace.getField(3);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void updateProgressBar(final int id, final int data) {
-        tileFurnace.setField(id, data);
-    }
-
-    @Override
-    public boolean canInteractWith(final EntityPlayer playerIn) {
-        return tileFurnace.isUseableByPlayer(playerIn);
+        ticksGrindingItemSoFar = getTileFurnace().getField(TileEntityInfuser.ITEM_INFUSING_STATUS);
+        timeCanGrind = getTileFurnace().getField(TileEntityInfuser.INFUSING_FUEL_LEFT);
+        ticksPerItem = getTileFurnace().getField(TileEntityInfuser.TIME_TO_INFUSE_ITEM);
     }
 
     @Override
@@ -95,18 +75,21 @@ public class ContainerInfuser extends Container {
                     return null;
                 }
                 slot.onSlotChange(itemStack2, itemStack1);
-            } else if (slotIndex != TileEntityInfuser.INPUT_SLOT) {
-                // check if there is a grinding recipe for the stack
+            } else if (slotIndex != TileEntityInfuser.INPUT_SLOT && slotIndex != TileEntityInfuser.FUEL_SLOT) {
                 if (ModInfusingRecipes.getInfusingResults(itemStack2) != null) {
                     if (!mergeItemStack(itemStack2, 0, 1, false)) {
+                        return null;
+                    }
+                } else if(FuelUtils.isFuel(itemStack2)) {
+                    if (!mergeItemStack(itemStack2, 1, 2, false)) {
                         return null;
                     }
                 } else if (slotIndex >= sizeInventory && slotIndex < sizeInventory + 27) {
                     if (!mergeItemStack(itemStack2, sizeInventory + 27, sizeInventory + 36, false)) {
                         return null;
                     }
-                } else if (slotIndex >= sizeInventory + 27 && slotIndex < sizeInventory + 36 && !mergeItemStack(itemStack2,
-                        sizeInventory + 1, sizeInventory + 27, false)) {
+                } else if (slotIndex >= sizeInventory + 27 && slotIndex < sizeInventory + 36 && !mergeItemStack(
+                        itemStack2, sizeInventory + 1, sizeInventory + 27, false)) {
                     return null;
                 }
             } else if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, false)) {

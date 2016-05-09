@@ -10,7 +10,6 @@ public class ModShapelessRecipes {
 
     public static void buildShapelessRecipes() {
         xpBlockToGem();
-        xpGemToXpApple();
         xpBottleToXpGem();
     }
 
@@ -18,11 +17,8 @@ public class ModShapelessRecipes {
         GameRegistry.addShapelessRecipe(new ItemStack(ModItems.xpGem, 9), new ItemStack(ModBlocks.xpGemBlock));
     }
 
-    private static void xpGemToXpApple() {
-        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.xpApple), new ItemStack(ModItems.xpGem), new ItemStack(Items.apple));
-    }
-
     private static void xpBottleToXpGem() {
-        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.xpGem, 3), new ItemStack(Items.experience_bottle), new ItemStack(Items.emerald));
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.xpGem, 3), new ItemStack(Items.experience_bottle),
+                new ItemStack(Items.emerald));
     }
 }

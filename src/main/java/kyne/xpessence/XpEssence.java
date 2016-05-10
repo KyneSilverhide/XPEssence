@@ -1,6 +1,7 @@
 package kyne.xpessence;
 
 import kyne.xpessence.blocks.ModBlocks;
+import kyne.xpessence.events.MobDropEvent;
 import kyne.xpessence.gui.GUIHandler;
 import kyne.xpessence.items.ModItems;
 import kyne.xpessence.proxy.ClientProxy;
@@ -43,6 +44,7 @@ public class XpEssence {
 
         MinecraftForge.addGrassSeed(new ItemStack(ModItems.devitalizedSeeds), 1);
         NetworkRegistry.INSTANCE.registerGuiHandler(XpEssence.instance, new GUIHandler());
+        MinecraftForge.EVENT_BUS.register(new MobDropEvent());
     }
 
     @Mod.EventHandler

@@ -1,7 +1,9 @@
 package kyne.xpessence;
 
 import kyne.xpessence.blocks.ModBlocks;
+import kyne.xpessence.events.BucketHandler;
 import kyne.xpessence.events.MobDropEvent;
+import kyne.xpessence.fluids.ModFluids;
 import kyne.xpessence.gui.GUIHandler;
 import kyne.xpessence.items.ModItems;
 import kyne.xpessence.proxy.ClientProxy;
@@ -33,11 +35,15 @@ public class XpEssence {
     public void preInit(final FMLPreInitializationEvent event) {
         logger.fine("Pre-initializing " + Constants.MODID + " " + event);
 
+        ModFluids.registerFluids();
+
         ModBlocks.initBlocks();
         ModItems.initItems();
 
         ModItems.registerItems();
         ModBlocks.registerBlocks();
+
+        ModItems.registerFluidContainers();
 
         ModTileEntities.registerTileEntities();
         ModRecipes.registerCraftingRecipes();
@@ -45,6 +51,7 @@ public class XpEssence {
         MinecraftForge.addGrassSeed(new ItemStack(ModItems.devitalizedSeeds), 1);
         NetworkRegistry.INSTANCE.registerGuiHandler(XpEssence.instance, new GUIHandler());
         MinecraftForge.EVENT_BUS.register(new MobDropEvent());
+        MinecraftForge.EVENT_BUS.register(BucketHandler.INSTANCE);
     }
 
     @Mod.EventHandler

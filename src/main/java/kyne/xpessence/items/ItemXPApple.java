@@ -1,6 +1,7 @@
 package kyne.xpessence.items;
 
 import kyne.xpessence.tab.ModTabs;
+import kyne.xpessence.utils.XPUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
@@ -21,8 +22,9 @@ public class ItemXPApple extends ItemFood {
 
     @Override
     protected void onFoodEaten(final ItemStack stack, final World worldIn, final EntityPlayer player) {
-        player.addExperience(10);
         final BlockPos position = player.getPosition();
+        XPUtils.addPlayerXP(player, XPUtils.XP_PER_GEM);
+        player.swingItem();
         worldIn.playSound(position.getX(), position.getY(), position.getZ(), "random.orb", 0.7f, 1.0f, false);
         super.onFoodEaten(stack, worldIn, player);
     }

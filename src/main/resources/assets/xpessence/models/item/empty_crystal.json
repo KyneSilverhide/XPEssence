@@ -1,7 +1,7 @@
 {
   "parent": "builtin/generated",
   "textures": {
-    "layer0": "xpessence:items/xp_gem"
+    "layer0": "xpessence:items/empty_crystal"
   },
   "display": {
     "thirdperson": {

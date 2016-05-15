@@ -2,6 +2,7 @@ package kyne.xpessence.items;
 
 import kyne.xpessence.items.base.ItemXPFuel;
 import kyne.xpessence.tab.ModTabs;
+import kyne.xpessence.utils.XPUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -24,7 +25,8 @@ public class ItemXPGem extends ItemXPFuel {
         worldIn.playSound(position.getX(), position.getY(), position.getZ(), "random.orb", 0.7f, 1.0f, false);
 
         itemStackIn.stackSize -= 1;
-        playerIn.addExperience(10);
+        XPUtils.addPlayerXP(playerIn, XPUtils.XP_PER_GEM);
+        playerIn.swingItem();
         return itemStackIn;
     }
 
@@ -35,7 +37,7 @@ public class ItemXPGem extends ItemXPFuel {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+    public void addInformation(final ItemStack stack, final EntityPlayer player, final List list, final boolean par4) {
         list.add("Use it to gain XP");
     }
 

@@ -14,6 +14,7 @@ public class ModShapedRecipes {
         xpGemToGlass();
         xpGlassToXpGlassPane();
         xpInfuser();
+        glassPaneToEmptyCrystal();
     }
 
     private static void xpInfuser() {
@@ -37,5 +38,10 @@ public class ModShapedRecipes {
     private static void xpGlassToXpGlassPane() {
         GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.xpGemGlassPane, 16), "ggg", "ggg",
                 'g', ModBlocks.xpGemGlassBlock);
+    }
+
+    private static void glassPaneToEmptyCrystal() {
+        GameRegistry.addShapedRecipe(new ItemStack(ModItems.emptyCrystal), " p ", "p p", " p ",
+                'p', Blocks.glass_pane);
     }
 }

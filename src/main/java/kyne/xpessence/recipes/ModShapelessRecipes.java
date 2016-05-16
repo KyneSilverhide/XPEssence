@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModShapelessRecipes {
 
-    public static void buildShapelessRecipes() {
+    public static void registerShapelessRecipes() {
         xpBlockToGem();
         xpBottleToXpGem();
     }

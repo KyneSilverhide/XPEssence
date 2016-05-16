@@ -15,15 +15,10 @@ import java.util.Map;
 
 public class BucketHandler {
 
-    public static BucketHandler INSTANCE = new BucketHandler();
     public static Map<Block, Item> buckets = new HashMap<Block, Item>();
-
-    private BucketHandler() {
-    }
 
     @SubscribeEvent
     public void onBucketFill(final FillBucketEvent event) {
-        System.out.println("ON BUCKET FILL");
         final ItemStack result = fillCustomBucket(event.world, event.target);
         if (result == null) {
             return;

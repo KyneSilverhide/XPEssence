@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 
 public class ModShapedRecipes {
 
-    public static void buildShapedRecipes() {
+    public static void registerShapedRecipes() {
         xpGemToBlock();
         xpGemToGlass();
         xpGlassToXpGlassPane();

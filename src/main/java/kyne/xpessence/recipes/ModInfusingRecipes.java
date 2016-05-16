@@ -15,7 +15,7 @@ public class ModInfusingRecipes {
     private static final int METADATA_WILDCARD_VALUE = 32767;
     private static final Map<ItemStack, ItemStack> smeltingList = Maps.newHashMap();
 
-    public static void buildSmeltingRecipes() {
+    public static void registerSmeltingRecipes() {
         addSmeltingRecipe(new ItemStack(ModItems.devitalizedSeeds), new ItemStack(ModItems.xpSeeds));
         addSmeltingRecipe(new ItemStack(Items.apple), new ItemStack(ModItems.xpApple));
         addSmeltingRecipe(new ItemStack(Item.getItemFromBlock(Blocks.glass)),

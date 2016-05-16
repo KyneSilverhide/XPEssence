@@ -9,5 +9,6 @@ public class FluidLiquidExperience extends Fluid {
     public FluidLiquidExperience() {
         super("liquid_experience", new ResourceLocation(Constants.MODID, "blocks/liquid_xp_still"),
                 new ResourceLocation(Constants.MODID, "blocks/liquid_xp_flowing"));
+
     }
 }

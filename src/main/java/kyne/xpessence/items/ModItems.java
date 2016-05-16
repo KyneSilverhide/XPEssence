@@ -7,9 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import java.util.ArrayList;
@@ -47,12 +44,10 @@ public class ModItems {
     }
 
     public static void registerFluidContainers() {
-        registerBucket(ModFluids.liquidExperienceBlock.getFluid(), ModFluids.liquidExperienceBlock, ModItems.bucketLiquidXP);
+        registerBucket(ModFluids.liquidExperienceBlock, ModItems.bucketLiquidXP);
     }
 
-    private static void registerBucket(final Fluid fluid, final Block fluidBlock, final Item bucketItem) {
-        final ItemStack filledBucket = new ItemStack(bucketItem);
-        FluidContainerRegistry.registerFluidContainer(fluid, filledBucket, FluidContainerRegistry.EMPTY_BUCKET);
+    private static void registerBucket(final Block fluidBlock, final Item bucketItem) {
         BucketHandler.addBucket(fluidBlock, bucketItem);
     }
 

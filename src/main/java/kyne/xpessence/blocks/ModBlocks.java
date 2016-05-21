@@ -1,6 +1,7 @@
 package kyne.xpessence.blocks;
 
 import kyne.xpessence.Constants;
+import kyne.xpessence.items.ItemBlockEssenceTorch;
 import kyne.xpessence.items.ItemBlockXPGem;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -23,6 +24,7 @@ public class ModBlocks {
     public static Block xpGemGlassPane;
     public static Block xpInfuserOn;
     public static Block xpInfuserOff;
+    public static Block essenceTorch;
 
     public static void initBlocks() {
         xpGemBlock = build(new BlockXPGem(), ItemBlockXPGem.class);
@@ -31,9 +33,10 @@ public class ModBlocks {
         xpGemGlassPane = build(new BlockXPGemGlassPane());
         xpInfuserOn = build(new BlockInfuser(true));
         xpInfuserOff = build(new BlockInfuser(false));
+        essenceTorch = build(new BlockEssenceTorch(), ItemBlockEssenceTorch.class);
     }
 
-    private static Block build(final BlockXPGem block, final Class<? extends ItemBlock> itemBlock) {
+    private static Block build(final Block block, final Class<? extends ItemBlock> itemBlock) {
         itemBlocks.put(block, itemBlock);
         return block;
     }

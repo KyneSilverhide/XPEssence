@@ -12,6 +12,7 @@ tile.xp_gemglass_pane.name=Infused Gem Glass Pane
 tile.xp_infuser_on.name=Experience Infuser (burning)
 tile.xp_infuser_off.name=Experience Infuser
 tile.liquid_experience.name=Liquid Experience
+tile.essence_torch.name=Essence Torch
 
 itemGroup.xp_essence_tab=XP Essence
 

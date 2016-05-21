@@ -17,6 +17,7 @@ public class BlockInfuser extends BasicMachine {
 
     public BlockInfuser(final boolean infusing) {
         super(infusing, "xp_infuser", Item.getItemFromBlock(ModBlocks.xpInfuserOff), GUI.INFUSER);
+        this.setTickRandomly(true);
     }
 
     public static void setState(final boolean active, final World worldIn, final BlockPos pos) {

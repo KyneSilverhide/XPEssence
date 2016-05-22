@@ -7,6 +7,10 @@ import net.minecraft.item.ItemStack;
 
 public class InfusingSlot extends Slot {
 
+    public InfusingSlot() {
+        super(null, 0, 0, 0);
+    }
+
     public InfusingSlot(final IInventory inventoryIn, final int index, final int xPosition, final int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
     }

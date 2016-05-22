@@ -10,6 +10,8 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -25,15 +27,14 @@ import java.util.Random;
 public abstract class BasicMachine extends BlockContainer {
 
     public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-
     private final boolean active;
-    private final Item droppedItem;
     private final int guiID;
 
-    public BasicMachine(final boolean active, final String name, final Item droppedItem, final int guiID) {
+    private static boolean keepInventory = false;
+
+    public BasicMachine(final boolean active, final String name, final int guiID) {
         super(Material.rock);
         this.active = active;
-        this.droppedItem = droppedItem;
         this.guiID = guiID;
         this.setUnlocalizedName(name + "_" + (active ? "on" : "off"));
         this.setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -43,13 +44,43 @@ public abstract class BasicMachine extends BlockContainer {
         }
     }
 
+    public static void setState(final boolean active, final World worldIn, final BlockPos pos, final Block machineActiveBlock, final Block machineInactiveBlock) {
+        final IBlockState iblockstate = worldIn.getBlockState(pos);
+        final TileEntity tileentity = worldIn.getTileEntity(pos);
+
+        keepInventory = true;
+        if (active) {
+            worldIn.setBlockState(pos, machineActiveBlock.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        } else {
+            worldIn.setBlockState(pos, machineInactiveBlock.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+        }
+        keepInventory = false;
+        if (tileentity != null) {
+            tileentity.validate();
+            worldIn.setTileEntity(pos, tileentity);
+        }
+    }
+
+    @Override
+    public void breakBlock(final World worldIn, final BlockPos pos, final IBlockState state) {
+        if (!keepInventory) {
+            final TileEntity tileentity = worldIn.getTileEntity(pos);
+            InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileentity);
+            worldIn.updateComparatorOutputLevel(pos, this);
+            super.breakBlock(worldIn, pos, state);
+        }
+    }
+
     public boolean isActive() {
         return active;
     }
 
     @Override
+    public abstract Item getItem(World worldIn, BlockPos pos);
+
+    @Override
     public Item getItemDropped(final IBlockState state, final Random rand, final int fortune) {
-        return droppedItem;
+        return getItem(null, null);
     }
 
     @Override
@@ -80,8 +111,7 @@ public abstract class BasicMachine extends BlockContainer {
                                     final EntityPlayer parPlayer, final EnumFacing parSide, final float hitX,
                                     final float hitY, final float hitZ) {
         if (!parWorld.isRemote) {
-            parPlayer.openGui(XpEssence.instance, guiID, parWorld, parBlockPos.getX(), parBlockPos.getY(),
-                    parBlockPos.getZ());
+            parPlayer.openGui(XpEssence.instance, guiID, parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
         }
         return true;
     }
@@ -100,12 +130,6 @@ public abstract class BasicMachine extends BlockContainer {
     public void onBlockPlacedBy(final World worldIn, final BlockPos pos, final IBlockState state,
                                 final EntityLivingBase placer, final ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public Item getItem(final World worldIn, final BlockPos pos) {
-        return droppedItem;
     }
 
     @Override

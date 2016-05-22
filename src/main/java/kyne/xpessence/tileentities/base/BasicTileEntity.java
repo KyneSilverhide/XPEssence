@@ -1,11 +1,14 @@
 package kyne.xpessence.tileentities.base;
 
+import kyne.xpessence.Constants;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityLockable;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -15,62 +18,47 @@ import net.minecraft.world.World;
 
 public abstract class BasicTileEntity extends TileEntityLockable implements ISidedInventory, ITickable {
 
-    private ItemStack[] tileEntityItemStacks;
-    private String customName;
+    protected final TileEntityContentConfig tileEntityContentConfig;
+    private final String name;
 
-    public BasicTileEntity(final ItemStack[] tileEntityItemStacks) {
-        this.tileEntityItemStacks = tileEntityItemStacks;
-        this.customName = null;
-    }
-
-    public String getCustomName() {
-        return customName;
-    }
-
-    public void setCustomName(final String customName) {
-        this.customName = customName;
-    }
-
-    public ItemStack[] getTileEntityItemStacks() {
-        return tileEntityItemStacks;
-    }
-
-    public void setTileEntityItemStacks(final ItemStack[] tileEntityItemStacks) {
-        this.tileEntityItemStacks = tileEntityItemStacks;
+    public BasicTileEntity(final TileEntityContentConfig tileEntityContentConfig, final String name) {
+        this.tileEntityContentConfig = tileEntityContentConfig;
+        this.name = name;
     }
 
     @Override
-    public boolean shouldRefresh(final World world, final BlockPos pos, final IBlockState oldState,
-                                 final IBlockState newSate) {
+    public String getName() {
+        return "container." + name + ".name";
+    }
+
+    @Override
+    public boolean shouldRefresh(final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newSate) {
         return (oldState.getBlock() != newSate.getBlock());
     }
 
     @Override
-    public int getSizeInventory() {
-        return tileEntityItemStacks.length;
+    public ItemStack getStackInSlot(final int index) {
+        return tileEntityContentConfig.getStackAtIndex(index);
     }
 
-    @Override
-    public ItemStack getStackInSlot(final int index) {
-        return tileEntityItemStacks[index];
+    public TileEntityContentConfig getTileEntityContentConfig() {
+        return tileEntityContentConfig;
     }
 
     @Override
     public ItemStack decrStackSize(final int index, final int count) {
-        if (tileEntityItemStacks[index] != null) {
+        final ItemStack stackAtIndex = tileEntityContentConfig.getStackAtIndex(index);
+        if (stackAtIndex != null) {
             final ItemStack itemstack;
-
-            if (tileEntityItemStacks[index].stackSize <= count) {
-                itemstack = tileEntityItemStacks[index];
-                tileEntityItemStacks[index] = null;
+            if (stackAtIndex.stackSize <= count) {
+                itemstack = stackAtIndex;
+                tileEntityContentConfig.setItemStackAtIndex(index, null);
                 return itemstack;
             } else {
-                itemstack = tileEntityItemStacks[index].splitStack(count);
-
-                if (tileEntityItemStacks[index].stackSize == 0) {
-                    tileEntityItemStacks[index] = null;
+                itemstack = stackAtIndex.splitStack(count);
+                if (stackAtIndex.stackSize == 0) {
+                    tileEntityContentConfig.setItemStackAtIndex(index, null);
                 }
-
                 return itemstack;
             }
         } else {
@@ -78,41 +66,104 @@ public abstract class BasicTileEntity extends TileEntityLockable implements ISid
         }
     }
 
-    @Override
-    public void openInventory(final EntityPlayer player) {
+    public void readFromNBT(final NBTTagCompound compound) {
+        super.readFromNBT(compound);
+        final NBTTagList nbttaglist = compound.getTagList("Items", 10);
 
+        for (int i = 0; i < nbttaglist.tagCount(); i++) {
+            final NBTTagCompound nbttagcompound = nbttaglist.getCompoundTagAt(i);
+            final int j = nbttagcompound.getByte("Slot");
+
+            if (j >= 0 && j < getSizeInventory()) {
+                tileEntityContentConfig.setItemStackAtIndex(j, ItemStack.loadItemStackFromNBT(nbttagcompound));
+            }
+        }
+
+        for (final Integer index : tileEntityContentConfig.getFieldIndexes()) {
+            final String fieldName = tileEntityContentConfig.getFieldName(index);
+            tileEntityContentConfig.setFieldWithIndex(index, compound.getShort(fieldName));
+        }
+    }
+
+    public void writeToNBT(final NBTTagCompound compound) {
+        super.writeToNBT(compound);
+
+        for (final Integer index : tileEntityContentConfig.getFieldIndexes()) {
+            final String fieldName = tileEntityContentConfig.getFieldName(index);
+            compound.setShort(fieldName, (short) tileEntityContentConfig.getFieldWithIndex(index));
+        }
+        final NBTTagList nbttaglist = new NBTTagList();
+        for (int i = 0; i < this.getSizeInventory(); ++i) {
+            if (tileEntityContentConfig.getStackAtIndex(i) != null) {
+                final NBTTagCompound nbttagcompound = new NBTTagCompound();
+                nbttagcompound.setByte("Slot", (byte) i);
+                tileEntityContentConfig.getStackAtIndex(i).writeToNBT(nbttagcompound);
+                nbttaglist.appendTag(nbttagcompound);
+            }
+        }
+        compound.setTag("Items", nbttaglist);
     }
 
     @Override
-    public void closeInventory(final EntityPlayer player) {
+    public boolean canExtractItem(final int parSlotIndex, final ItemStack parStack, final EnumFacing parFacing) {
+        return true;
+    }
 
+    @Override
+    public void openInventory(final EntityPlayer player) { /* Do nothing */}
+
+    @Override
+    public void closeInventory(final EntityPlayer player) { /* Do nothing */ }
+
+    @Override
+    public boolean canInsertItem(final int index, final ItemStack itemStackIn, final EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn);
+    }
+
+    @Override
+    public int getField(final int index) {
+        return tileEntityContentConfig.getFieldWithIndex(index);
+    }
+
+    @Override
+    public void setField(final int id, final int value) {
+        tileEntityContentConfig.setFieldWithIndex(id, value);
     }
 
     @Override
     public ItemStack removeStackFromSlot(final int index) {
-        if (this.tileEntityItemStacks[index] != null) {
-            final ItemStack itemstack = this.tileEntityItemStacks[index];
-            this.tileEntityItemStacks[index] = null;
-            return itemstack;
-        } else {
-            return null;
-        }
+        final ItemStack itemStack = tileEntityContentConfig.getStackAtIndex(index);
+        tileEntityContentConfig.setItemStackAtIndex(index, null);
+        return itemStack;
     }
 
     @Override
-    public abstract void setInventorySlotContents(int index, ItemStack stack);
-
-    @Override
-    public abstract String getName();
-
-    @Override
-    public boolean hasCustomName() {
-        return customName != null && customName.length() > 0;
+    public void setInventorySlotContents(final int index, final ItemStack stack) {
+        tileEntityContentConfig.setItemStackAtIndex(index, stack);
+        if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+            stack.stackSize = getInventoryStackLimit();
+        }
     }
 
     @Override
     public int getInventoryStackLimit() {
         return 64;
+    }
+
+    protected boolean isSameItemStackAlreadyInSlot(final ItemStack stack, final int index) {
+        return stack != null && stack.isItemEqual(
+                tileEntityContentConfig.getStackAtIndex(index)) && ItemStack.areItemStackTagsEqual(stack,
+                tileEntityContentConfig.getStackAtIndex(index));
+    }
+
+    @Override
+    public boolean isItemValidForSlot(final int index, final ItemStack stack) {
+        return tileEntityContentConfig.getSlotDefinition(index) != null && tileEntityContentConfig.getSlotDefinition(index).isItemValid(stack);
+    }
+
+    @Override
+    public boolean hasCustomName() {
+        return false;
     }
 
     @Override
@@ -122,36 +173,23 @@ public abstract class BasicTileEntity extends TileEntityLockable implements ISid
     }
 
     @Override
-    public abstract int getField(int id);
-
-    @Override
-    public abstract void setField(int id, int value);
-
-    @Override
     public abstract int[] getSlotsForFace(EnumFacing side);
 
     @Override
-    public boolean canInsertItem(final int index, final ItemStack itemStackIn, final EnumFacing direction) {
-        return isItemValidForSlot(index, itemStackIn);
-    }
-
-    @Override
-    public abstract boolean isItemValidForSlot(int index, ItemStack stack);
-
-    @Override
-    public abstract boolean canExtractItem(final int parSlotIndex, final ItemStack parStack,
-                                           final EnumFacing parFacing);
-
-    @Override
     public int getFieldCount() {
-        return tileEntityItemStacks.length;
+        return tileEntityContentConfig.getFieldIndexes().size();
     }
 
     @Override
     public void clear() {
-        for (int i = 0; i < tileEntityItemStacks.length; ++i) {
-            tileEntityItemStacks[i] = null;
+        for (int i = 0; i < getSizeInventory(); ++i) {
+            tileEntityContentConfig.setItemStackAtIndex(i, null);
         }
+    }
+
+    @Override
+    public int getSizeInventory() {
+        return tileEntityContentConfig.getInventorySize();
     }
 
     @Override
@@ -161,5 +199,7 @@ public abstract class BasicTileEntity extends TileEntityLockable implements ISid
     public abstract Container createContainer(InventoryPlayer playerInventory, EntityPlayer playerIn);
 
     @Override
-    public abstract String getGuiID();
+    public String getGuiID() {
+        return Constants.MODID + ":" + name;
+    }
 }

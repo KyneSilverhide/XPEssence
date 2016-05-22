@@ -6,6 +6,10 @@ import net.minecraft.item.ItemStack;
 
 public class OutputSlot extends Slot {
 
+    public OutputSlot() {
+        super(null, 0, 0, 0);
+    }
+
     public OutputSlot(final IInventory inventoryIn, final int index, final int xPosition, final int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
     }

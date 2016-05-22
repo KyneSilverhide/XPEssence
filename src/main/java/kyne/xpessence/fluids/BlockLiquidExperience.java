@@ -51,10 +51,8 @@ public class BlockLiquidExperience extends BlockFluidInteractive {
         final int bMeta = blockState.getBlock().getMetaFromState(blockState);
         final BlockMetadata resultBlock;
 
-        System.out.println("block = " + block);
         if (hasInteraction(block, bMeta)) {
             resultBlock = getInteraction(block, bMeta);
-            System.out.println("can ve converted to " + resultBlock);
             final IBlockState newBlockState = resultBlock.getBlock().getStateFromMeta(resultBlock.getMetadata());
             world.setBlockState(pos, newBlockState, BLOCK_UPDATE_AND_SEND_CLIENT);
         }

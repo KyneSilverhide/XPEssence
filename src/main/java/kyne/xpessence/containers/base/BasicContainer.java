@@ -1,5 +1,6 @@
 package kyne.xpessence.containers.base;
 
+import kyne.xpessence.tileentities.base.BasicTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,10 +11,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BasicContainer extends Container {
 
-    private final IInventory tileFurnace;
+    private final BasicTileEntity tileEntity;
 
-    public BasicContainer(final InventoryPlayer playerInventory, final IInventory furnaceInventory) {
-        this.tileFurnace = furnaceInventory;
+    public BasicContainer(final IInventory tileEntity) {
+        this.tileEntity = (BasicTileEntity) tileEntity;
+    }
+
+    public BasicTileEntity getTileEntity() {
+        return tileEntity;
     }
 
     public void addPlayerInventory(final InventoryPlayer playerInventory) {
@@ -30,18 +35,14 @@ public class BasicContainer extends Container {
         }
     }
 
-    public IInventory getTileFurnace() {
-        return tileFurnace;
-    }
-
     @Override
     @SideOnly(Side.CLIENT)
     public void updateProgressBar(final int id, final int data) {
-        tileFurnace.setField(id, data);
+        tileEntity.setField(id, data);
     }
 
     @Override
     public boolean canInteractWith(final EntityPlayer playerIn) {
-        return tileFurnace.isUseableByPlayer(playerIn);
+        return tileEntity.isUseableByPlayer(playerIn);
     }
 }

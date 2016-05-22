@@ -2,7 +2,9 @@ package kyne.xpessence.gui;
 
 import kyne.xpessence.Constants;
 import kyne.xpessence.containers.ContainerInfuser;
+import kyne.xpessence.tileentities.InfuserContentConfig;
 import kyne.xpessence.tileentities.TileEntityInfuser;
+import kyne.xpessence.tileentities.base.BasicTileEntity;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -19,12 +21,15 @@ public class GUIInfuser extends GuiContainer {
     private static final int TEXT_COLOR_GRAY = 4210752;
 
     private final InventoryPlayer inventoryPlayer;
-    private final IInventory tileInfuser;
+    private final BasicTileEntity tileInfuser;
+    private final InfuserContentConfig tileEntityContentConfig;
+
 
     public GUIInfuser(final InventoryPlayer parInventoryPlayer, final IInventory infuser) {
         super(new ContainerInfuser(parInventoryPlayer, infuser));
         inventoryPlayer = parInventoryPlayer;
-        tileInfuser = infuser;
+        tileInfuser = (BasicTileEntity) infuser;
+        tileEntityContentConfig = (InfuserContentConfig) tileInfuser.getTileEntityContentConfig();
     }
 
     @Override
@@ -36,7 +41,7 @@ public class GUIInfuser extends GuiContainer {
         final String inventoryName = inventoryPlayer.getDisplayName().getUnformattedText();
         fontRendererObj.drawString(inventoryName, 8, ySize - 94, 4210752);
 
-        final String fuelLeft = String.valueOf(tileInfuser.getField(TileEntityInfuser.INFUSING_FUEL_LEFT));
+        final String fuelLeft = String.valueOf(tileEntityContentConfig.getInfusingFuelLeft());
         fontRendererObj.drawString("Experience: " + fuelLeft, xSize / 2 - fontRendererObj.getStringWidth(fuelLeft) / 2,
                 ySize - 94, TEXT_COLOR_GRAY);
     }
@@ -51,13 +56,13 @@ public class GUIInfuser extends GuiContainer {
         drawTexturedModalRect(marginHorizontal, marginVertical, 0, 0, xSize, ySize);
 
         if (TileEntityFurnace.isBurning(this.tileInfuser)) {
-            drawFueldStatus(marginHorizontal, marginVertical);
+            drawFuelStatus(marginHorizontal, marginVertical);
         }
 
         drawProgressArrow(marginHorizontal, marginVertical);
     }
 
-    private void drawFueldStatus(final int marginHorizontal, final int marginVertical) {
+    private void drawFuelStatus(final int marginHorizontal, final int marginVertical) {
         final int infusingLevel = this.getInfusingFuelScaled();
         this.drawTexturedModalRect(marginHorizontal + 56, marginVertical + 36 + 12 - infusingLevel, 176,
                 12 - infusingLevel, 14, infusingLevel + 1);
@@ -69,17 +74,17 @@ public class GUIInfuser extends GuiContainer {
     }
 
     private int getInfusingFuelScaled() {
-        int i = this.tileInfuser.getField(TileEntityInfuser.CURRENT_ITEM_BURN_TIME);
+        int i = this.tileEntityContentConfig.getCurrentItemBurnTime();
         if (i == 0) {
             i = TileEntityInfuser.ITEM_INFUSING_TIME;
         }
-        return this.tileInfuser.getField(TileEntityInfuser.INFUSING_FUEL_LEFT) * 13 / i;
+        return this.tileInfuser.getField(InfuserContentConfig.INFUSING_FUEL_LEFT) * 13 / i;
     }
 
     private int getProgressLevel(final int progressWithInPixels) {
-        final int ticksGrindingItemSoFar = tileInfuser.getField(TileEntityInfuser.ITEM_INFUSING_STATUS);
-        final int ticksPerItem = tileInfuser.getField(TileEntityInfuser.TIME_TO_INFUSE_ITEM);
-        return ticksPerItem != 0 && ticksGrindingItemSoFar != 0 ? ticksGrindingItemSoFar * progressWithInPixels /
-                ticksPerItem : 0;
+        final int itemInfusingStatus = tileEntityContentConfig.getItemInfusingStatus();
+        final int timeToInfuseItem = tileEntityContentConfig.getTimeToInfuseItem();
+        return timeToInfuseItem != 0 && itemInfusingStatus != 0 ?
+                (itemInfusingStatus * progressWithInPixels / timeToInfuseItem) : 0;
     }
 }

@@ -5,11 +5,10 @@ import kyne.xpessence.recipes.ModInfusingRecipes;
 import kyne.xpessence.slots.FuelSlot;
 import kyne.xpessence.slots.InfusingSlot;
 import kyne.xpessence.slots.OutputSlot;
-import kyne.xpessence.tileentities.TileEntityInfuser;
+import kyne.xpessence.tileentities.InfuserContentConfig;
 import kyne.xpessence.utils.FuelUtils;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -17,65 +16,32 @@ import net.minecraft.item.ItemStack;
 public class ContainerInfuser extends BasicContainer {
 
     private final int sizeInventory;
-    private int ticksGrindingItemSoFar;
-    private int ticksPerItem;
-    private int timeCanGrind;
 
-    public ContainerInfuser(final InventoryPlayer playerInventory, final IInventory furnaceInventory) {
-        super(playerInventory, furnaceInventory);
-        this.sizeInventory = getTileFurnace().getSizeInventory();
-        this.addSlotToContainer(new InfusingSlot(furnaceInventory, 0, 56, 17));
-        this.addSlotToContainer(new FuelSlot(furnaceInventory, 1, 56, 53));
-        this.addSlotToContainer(new OutputSlot(furnaceInventory, 2, 116, 35));
+    public ContainerInfuser(final InventoryPlayer playerInventory, final IInventory tileEntity) {
+        super(tileEntity);
+        this.sizeInventory = tileEntity.getSizeInventory();
+        this.addSlotToContainer(new InfusingSlot(tileEntity, InfuserContentConfig.INPUT_SLOT, 56, 17));
+        this.addSlotToContainer(new FuelSlot(tileEntity, InfuserContentConfig.FUEL_SLOT, 56, 53));
+        this.addSlotToContainer(new OutputSlot(tileEntity, InfuserContentConfig.OUTPUT_SLOT, 116, 35));
 
         addPlayerInventory(playerInventory);
         addPlayerToolbar(playerInventory);
-    }
-
-    /**
-     * Looks for changes made in the container, sends them to every listener.
-     */
-    @Override
-    public void detectAndSendChanges() {
-        super.detectAndSendChanges();
-
-        for (final ICrafting icrafting : crafters) {
-            if (ticksGrindingItemSoFar != getTileFurnace().getField(TileEntityInfuser.ITEM_INFUSING_STATUS)) {
-                icrafting.sendProgressBarUpdate(this, TileEntityInfuser.ITEM_INFUSING_STATUS,
-                        getTileFurnace().getField(TileEntityInfuser.ITEM_INFUSING_STATUS));
-            }
-
-            if (timeCanGrind != getTileFurnace().getField(TileEntityInfuser.INFUSING_FUEL_LEFT)) {
-                icrafting.sendProgressBarUpdate(this, TileEntityInfuser.INFUSING_FUEL_LEFT,
-                        getTileFurnace().getField(TileEntityInfuser.INFUSING_FUEL_LEFT));
-            }
-
-            if (ticksPerItem != getTileFurnace().getField(TileEntityInfuser.TIME_TO_INFUSE_ITEM)) {
-                icrafting.sendProgressBarUpdate(this, TileEntityInfuser.TIME_TO_INFUSE_ITEM,
-                        getTileFurnace().getField(TileEntityInfuser.TIME_TO_INFUSE_ITEM));
-            }
-        }
-
-        ticksGrindingItemSoFar = getTileFurnace().getField(TileEntityInfuser.ITEM_INFUSING_STATUS);
-        timeCanGrind = getTileFurnace().getField(TileEntityInfuser.INFUSING_FUEL_LEFT);
-        ticksPerItem = getTileFurnace().getField(TileEntityInfuser.TIME_TO_INFUSE_ITEM);
     }
 
     @Override
     public ItemStack transferStackInSlot(final EntityPlayer playerIn, final int slotIndex) {
         ItemStack itemStack1 = null;
         final Slot slot = inventorySlots.get(slotIndex);
-
         if (slot != null && slot.getHasStack()) {
             final ItemStack itemStack2 = slot.getStack();
             itemStack1 = itemStack2.copy();
 
-            if (slotIndex == TileEntityInfuser.OUTPUT_SLOT) {
+            if (slotIndex == InfuserContentConfig.OUTPUT_SLOT) {
                 if (!mergeItemStack(itemStack2, sizeInventory, sizeInventory + 36, true)) {
                     return null;
                 }
                 slot.onSlotChange(itemStack2, itemStack1);
-            } else if (slotIndex != TileEntityInfuser.INPUT_SLOT && slotIndex != TileEntityInfuser.FUEL_SLOT) {
+            } else if (slotIndex != InfuserContentConfig.INPUT_SLOT && slotIndex != InfuserContentConfig.FUEL_SLOT) {
                 if (ModInfusingRecipes.getInfusingResults(itemStack2) != null) {
                     if (!mergeItemStack(itemStack2, 0, 1, false)) {
                         return null;

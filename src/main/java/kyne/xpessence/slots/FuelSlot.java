@@ -7,6 +7,10 @@ import net.minecraft.item.ItemStack;
 
 public class FuelSlot extends Slot {
 
+    public FuelSlot() {
+        super(null, 0, 0, 0);
+    }
+
     public FuelSlot(final IInventory inventoryIn, final int index, final int xPosition, final int yPosition) {
         super(inventoryIn, index, xPosition, yPosition);
     }

@@ -24,8 +24,8 @@ public class ModBlocks {
     public static Block xpGemGlassPane;
     public static Block xpInfuserOn;
     public static Block xpInfuserOff;
-//    public static Block xpCrucibleOn;
-//    public static Block xpCrucibleOff;
+    public static Block xpCrucibleOn;
+    public static Block xpCrucibleOff;
     public static Block essenceTorch;
 
     public static void initBlocks() {
@@ -35,8 +35,8 @@ public class ModBlocks {
         xpGemGlassPane = build(new BlockXPGemGlassPane());
         xpInfuserOn = build(new BlockInfuser(true));
         xpInfuserOff = build(new BlockInfuser(false));
-//        xpCrucibleOn = build(new BlockCrucible(true));
-//        xpCrucibleOn = build(new BlockCrucible(false));
+        xpCrucibleOn = build(new BlockCrucible(true));
+        xpCrucibleOn = build(new BlockCrucible(false));
         essenceTorch = build(new BlockEssenceTorch(), ItemBlockEssenceTorch.class);
     }
 

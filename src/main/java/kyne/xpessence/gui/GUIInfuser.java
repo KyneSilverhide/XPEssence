@@ -4,12 +4,10 @@ import kyne.xpessence.Constants;
 import kyne.xpessence.containers.ContainerInfuser;
 import kyne.xpessence.tileentities.InfuserContentConfig;
 import kyne.xpessence.tileentities.TileEntityInfuser;
-import kyne.xpessence.tileentities.base.BasicTileEntity;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,15 +19,15 @@ public class GUIInfuser extends GuiContainer {
     private static final int TEXT_COLOR_GRAY = 4210752;
 
     private final InventoryPlayer inventoryPlayer;
-    private final BasicTileEntity tileInfuser;
+    private final TileEntityInfuser tileInfuser;
     private final InfuserContentConfig tileEntityContentConfig;
-
 
     public GUIInfuser(final InventoryPlayer parInventoryPlayer, final IInventory infuser) {
         super(new ContainerInfuser(parInventoryPlayer, infuser));
         inventoryPlayer = parInventoryPlayer;
-        tileInfuser = (BasicTileEntity) infuser;
-        tileEntityContentConfig = (InfuserContentConfig) tileInfuser.getTileEntityContentConfig();
+        tileInfuser = (TileEntityInfuser) infuser;
+        tileEntityContentConfig = tileInfuser.getTileEntityContentConfig();
+        tileEntityContentConfig.debug();
     }
 
     @Override
@@ -55,7 +53,7 @@ public class GUIInfuser extends GuiContainer {
         final int marginVertical = (height - ySize) / 2;
         drawTexturedModalRect(marginHorizontal, marginVertical, 0, 0, xSize, ySize);
 
-        if (TileEntityFurnace.isBurning(this.tileInfuser)) {
+        if(tileInfuser.isInfusing()) {
             drawFuelStatus(marginHorizontal, marginVertical);
         }
 

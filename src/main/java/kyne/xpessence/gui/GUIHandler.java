@@ -1,6 +1,8 @@
 package kyne.xpessence.gui;
 
+import kyne.xpessence.containers.ContainerCrucible;
 import kyne.xpessence.containers.ContainerInfuser;
+import kyne.xpessence.tileentities.TileEntityCrucible;
 import kyne.xpessence.tileentities.TileEntityInfuser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -19,6 +21,8 @@ public class GUIHandler implements IGuiHandler {
         if (tileEntity != null) {
             if (ID == GUI.INFUSER) {
                 return new ContainerInfuser(player.inventory, (IInventory) tileEntity);
+            } else if (ID == GUI.CRUCIBLE) {
+                return new ContainerCrucible(player.inventory, (IInventory) tileEntity);
             }
         }
         return null;
@@ -33,6 +37,9 @@ public class GUIHandler implements IGuiHandler {
             if (ID == GUI.INFUSER) {
                 final TileEntityInfuser tileEntityInfuser = (TileEntityInfuser) tileEntity;
                 return new GUIInfuser(player.inventory, tileEntityInfuser);
+            } else if (ID == GUI.CRUCIBLE) {
+                final TileEntityCrucible tileEntityCrucible = (TileEntityCrucible) tileEntity;
+                return new GUICrucible(player.inventory, tileEntityCrucible);
             }
         }
         return null;

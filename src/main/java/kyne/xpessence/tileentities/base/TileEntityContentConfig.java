@@ -1,19 +1,20 @@
 package kyne.xpessence.tileentities.base;
 
-import net.minecraft.inventory.Slot;
+import kyne.xpessence.slots.base.SlotDefinition;
 import net.minecraft.item.ItemStack;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TileEntityContentConfig {
+public class TileEntityContentConfig implements Serializable {
 
     private final Map<Integer, Integer> fields = new HashMap<Integer, Integer>();
     private final Map<Integer, ItemStack> slots = new HashMap<Integer, ItemStack>();
     private final Map<Integer, String> fieldNames = new HashMap<Integer, String>();
-    private final Map<Integer, Slot> slotContainers = new HashMap<Integer, Slot>();
+    private final Map<Integer, SlotDefinition> slotContainers = new HashMap<Integer, SlotDefinition>();
 
     public int getFieldWithIndex(final int index) {
         return fields.containsKey(index) ? fields.get(index) : 0;
@@ -52,16 +53,23 @@ public class TileEntityContentConfig {
         return slots.size();
     }
 
-    protected void registerSlot(final int index, final Slot slot) {
+    protected void registerSlot(final int index, final SlotDefinition slotDefinition) {
         if(!slots.containsKey(index)) {
             slots.put(index, null);
         }
         if(slotContainers.containsKey(index)) {
-            slotContainers.put(index, slot);
+            slotContainers.put(index, slotDefinition);
         }
     }
 
-    public Slot getSlotDefinition(final int index) {
+    public void debug() {
+        System.out.println("FIELDS : ");
+        for (final Map.Entry<Integer, Integer> entry : fields.entrySet()) {
+            System.out.println("Field " + entry.getKey() + " -> " + entry.getValue());
+        }
+    }
+
+    public SlotDefinition getSlotDefinition(final int index) {
         return slotContainers.get(index);
     }
 
@@ -75,4 +83,6 @@ public class TileEntityContentConfig {
     public String getFieldName(final int index) {
         return fieldNames.get(index);
     }
+
+    
 }

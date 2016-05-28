@@ -1,8 +1,6 @@
 package kyne.xpessence.tileentities;
 
-import kyne.xpessence.slots.FuelSlot;
-import kyne.xpessence.slots.InfusingSlot;
-import kyne.xpessence.slots.OutputSlot;
+import kyne.xpessence.slots.SlotDefinitions;
 import kyne.xpessence.tileentities.base.TileEntityContentConfig;
 import net.minecraft.item.ItemStack;
 
@@ -18,9 +16,9 @@ public class InfuserContentConfig extends TileEntityContentConfig {
     public static final int TIME_TO_INFUSE_ITEM = 3;
 
     public InfuserContentConfig() {
-        registerSlot(INPUT_SLOT, new InfusingSlot());
-        registerSlot(FUEL_SLOT, new FuelSlot());
-        registerSlot(OUTPUT_SLOT, new OutputSlot());
+        registerSlot(INPUT_SLOT, SlotDefinitions.infusingDefinition);
+        registerSlot(FUEL_SLOT, SlotDefinitions.fuelDefinition);
+        registerSlot(OUTPUT_SLOT, SlotDefinitions.outputDefinition);
 
         registerField(INFUSING_FUEL_LEFT, "InfusingFuelLeft");
         registerField(CURRENT_ITEM_BURN_TIME, "CurrentItemBurnTime");

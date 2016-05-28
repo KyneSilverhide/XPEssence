@@ -2,7 +2,6 @@ package kyne.xpessence.proxy;
 
 import kyne.xpessence.Constants;
 import kyne.xpessence.blocks.ModBlocks;
-import kyne.xpessence.events.TextureStitcherGreenFlameFX;
 import kyne.xpessence.fluids.ModFluids;
 import kyne.xpessence.items.ModItems;
 import net.minecraft.block.Block;
@@ -12,7 +11,6 @@ import net.minecraft.client.resources.model.ModelBakery;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.IFluidBlock;
 
 public class ClientProxy extends CommonProxy {
@@ -34,8 +32,6 @@ public class ClientProxy extends CommonProxy {
 
         ModItems.registerRenders();
         ModBlocks.registerRenders();
-
-        MinecraftForge.EVENT_BUS.register(new TextureStitcherGreenFlameFX());
     }
 
     private void registerFluidModel(final IFluidBlock fluidBlock) {

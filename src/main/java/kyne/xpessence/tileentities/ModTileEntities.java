@@ -6,6 +6,7 @@ public class ModTileEntities {
 
     public static void registerTileEntities() {
         GameRegistry.registerTileEntity(TileEntityInfuser.class, "xpInfuser");
+        GameRegistry.registerTileEntity(TileEntityCrucible.class, "xpCrucible");
     }
 }
 

@@ -23,11 +23,8 @@ public class TileEntityInfuser extends BasicTileEntity {
     private static final int[] slotsBottom = new int[]{InfuserContentConfig.FUEL_SLOT};
     private static final int[] slotsSides = new int[]{InfuserContentConfig.OUTPUT_SLOT};
 
-    private final InfuserContentConfig infuserContentConfig;
-
     public TileEntityInfuser() {
         super(new InfuserContentConfig(), "xp_infuser");
-        infuserContentConfig = (InfuserContentConfig) tileEntityContentConfig;
     }
 
     @Override
@@ -35,58 +32,63 @@ public class TileEntityInfuser extends BasicTileEntity {
         super.setInventorySlotContents(index, stack);
 
         if (index == InfuserContentConfig.INPUT_SLOT && !isSameItemStackAlreadyInSlot(stack, index)) {
-            infuserContentConfig.setTimeToInfuseItem(ITEM_INFUSING_TIME);
-            infuserContentConfig.setItemInfusingStatus(0);
+            getTileEntityContentConfig().setTimeToInfuseItem(ITEM_INFUSING_TIME);
+            getTileEntityContentConfig().setItemInfusingStatus(0);
             markDirty();
         }
     }
 
     @Override
-    public void update() {
+    public InfuserContentConfig getTileEntityContentConfig() {
+        return (InfuserContentConfig) tileEntityContentConfig;
+    }
 
+    @Override
+    public void update() {
+        final InfuserContentConfig tileEntityContentConfig = getTileEntityContentConfig();
         boolean needsUpdate = false;
         final boolean wasInfusing = isInfusing();
 
-        final ItemStack inputItem = infuserContentConfig.getInputSlot();
-        final ItemStack fuelItem = infuserContentConfig.getFuelSlot();
-        final ItemStack outputItem = infuserContentConfig.getOutputSlot();
+        final ItemStack inputItem = tileEntityContentConfig.getInputSlot();
+        final ItemStack fuelItem = tileEntityContentConfig.getFuelSlot();
+        final ItemStack outputItem = tileEntityContentConfig.getOutputSlot();
 
-        final int timeToInfuseItem = infuserContentConfig.getTimeToInfuseItem();
+        final int timeToInfuseItem = tileEntityContentConfig.getTimeToInfuseItem();
         if (this.isInfusing()) {
-            infuserContentConfig.decreaseInfusingFuelLeft();
+            tileEntityContentConfig.decreaseInfusingFuelLeft();
         }
 
         if (!this.worldObj.isRemote) {
             if (this.isInfusing() || inputItem != null && fuelItem != null) {
                 if (!this.isInfusing() && this.canInfuseInputToOutput(inputItem, outputItem)) {
                     final int infusingPower = getInfusingPower(fuelItem);
-                    infuserContentConfig.setCurrentItemBurnTime(infusingPower);
-                    infuserContentConfig.setInfusingFuelLeft(infusingPower);
+                    tileEntityContentConfig.setCurrentItemBurnTime(infusingPower);
+                    tileEntityContentConfig.setInfusingFuelLeft(infusingPower);
 
                     if (this.isInfusing()) {
                         needsUpdate = true;
                         fuelItem.stackSize--;
                         if (fuelItem.stackSize == 0) {
-                            infuserContentConfig.setFuelSlot(null);
+                            tileEntityContentConfig.setFuelSlot(null);
                         }
                     }
                 }
 
                 if (this.isInfusing() && this.canInfuseInputToOutput(inputItem, outputItem)) {
-                    infuserContentConfig.increaseItemInfusingStatus();
+                    tileEntityContentConfig.increaseItemInfusingStatus();
 
-                    if (infuserContentConfig.getItemInfusingStatus() == timeToInfuseItem) {
-                        infuserContentConfig.setItemInfusingStatus(0);
-                        infuserContentConfig.setTimeToInfuseItem(ITEM_INFUSING_TIME);
+                    if (tileEntityContentConfig.getItemInfusingStatus() == timeToInfuseItem) {
+                        tileEntityContentConfig.setItemInfusingStatus(0);
+                        tileEntityContentConfig.setTimeToInfuseItem(ITEM_INFUSING_TIME);
                         this.infuseItem(inputItem, outputItem);
                         needsUpdate = true;
                     }
                 } else {
-                    infuserContentConfig.setItemInfusingStatus(0);
+                    tileEntityContentConfig.setItemInfusingStatus(0);
                 }
-            } else if (!this.isInfusing() && infuserContentConfig.getItemInfusingStatus() > 0) {
-                final int infusingStatus = MathHelper.clamp_int(infuserContentConfig.getItemInfusingStatus() - 2, 0, timeToInfuseItem);
-                infuserContentConfig.setItemInfusingStatus(infusingStatus);
+            } else if (!this.isInfusing() && tileEntityContentConfig.getItemInfusingStatus() > 0) {
+                final int infusingStatus = MathHelper.clamp_int(tileEntityContentConfig.getItemInfusingStatus() - 2, 0, timeToInfuseItem);
+                tileEntityContentConfig.setItemInfusingStatus(infusingStatus);
             }
 
             if (wasInfusing != this.isInfusing()) {
@@ -101,7 +103,7 @@ public class TileEntityInfuser extends BasicTileEntity {
     }
 
     public boolean isInfusing() {
-        return infuserContentConfig.getInfusingFuelLeft() > 0;
+        return getTileEntityContentConfig().getInfusingFuelLeft() > 0;
     }
 
     private boolean canInfuseInputToOutput(final ItemStack input, final ItemStack output) {
@@ -137,18 +139,18 @@ public class TileEntityInfuser extends BasicTileEntity {
     public void infuseItem(final ItemStack inputItem, final ItemStack outputItem) {
         if (canInfuseInputToOutput(inputItem, outputItem)) {
             final ItemStack futureInfusedItem = ModInfusingRecipes.getInfusingResults(
-                    infuserContentConfig.getInputSlot());
+                    getTileEntityContentConfig().getInputSlot());
             if (futureInfusedItem != null) {
                 if (outputItem == null) {
-                    infuserContentConfig.setOutputSlot(futureInfusedItem.copy());
+                    getTileEntityContentConfig().setOutputSlot(futureInfusedItem.copy());
                 } else if (outputItem.getItem() == futureInfusedItem.getItem()) {
-                    infuserContentConfig.getOutputSlot().stackSize += futureInfusedItem.stackSize;
+                    getTileEntityContentConfig().getOutputSlot().stackSize += futureInfusedItem.stackSize;
                     // Forge BugFix: Results may have multiple items
                 }
 
                 inputItem.stackSize--;
                 if (inputItem.stackSize <= 0) {
-                    infuserContentConfig.setInputSlot(null);
+                    getTileEntityContentConfig().setInputSlot(null);
                 }
             }
         }

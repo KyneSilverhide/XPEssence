@@ -12,11 +12,18 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @SideOnly(Side.CLIENT)
 public class GUIInfuser extends GuiContainer {
 
-    private static final ResourceLocation infuserTexture = new ResourceLocation(Constants.MODID + ":textures/gui/xp_infuser.png");
-    private static final int TEXT_COLOR_GRAY = 4210752;
+    private static final ResourceLocation infuserTexture = new ResourceLocation(
+            Constants.MODID + ":textures/gui/xp_infuser.png");
+    private static final int ARROW_X = 79;
+    private static final int ARROW_Y = 34;
+    private static final int ARROW_TEXTURE_X = 176;
+    private static final int ARROW_TEXTURE_Y = 14;
 
     private final InventoryPlayer inventoryPlayer;
     private final TileEntityInfuser tileInfuser;
@@ -27,21 +34,18 @@ public class GUIInfuser extends GuiContainer {
         inventoryPlayer = parInventoryPlayer;
         tileInfuser = (TileEntityInfuser) infuser;
         tileEntityContentConfig = tileInfuser.getTileEntityContentConfig();
-        tileEntityContentConfig.debug();
     }
 
     @Override
     protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
         final String guiTitle = tileInfuser.getDisplayName().getUnformattedText();
         final int titleWidth = fontRendererObj.getStringWidth(guiTitle);
-        fontRendererObj.drawString(guiTitle, xSize / 2 - titleWidth / 2, 6, TEXT_COLOR_GRAY);
+        fontRendererObj.drawString(guiTitle, xSize / 2 - titleWidth / 2, 6, GUIConstants.TEXT_COLOR_GRAY);
 
         final String inventoryName = inventoryPlayer.getDisplayName().getUnformattedText();
-        fontRendererObj.drawString(inventoryName, 8, ySize - 94, 4210752);
+        fontRendererObj.drawString(inventoryName, 8, ySize - 94, GUIConstants.TEXT_COLOR_GRAY);
 
-        final String fuelLeft = String.valueOf(tileEntityContentConfig.getInfusingFuelLeft());
-        fontRendererObj.drawString("Experience: " + fuelLeft, xSize / 2 - fontRendererObj.getStringWidth(fuelLeft) / 2,
-                ySize - 94, TEXT_COLOR_GRAY);
+        drawInfusingTooltip(mouseX, mouseY);
     }
 
     @Override
@@ -53,11 +57,28 @@ public class GUIInfuser extends GuiContainer {
         final int marginVertical = (height - ySize) / 2;
         drawTexturedModalRect(marginHorizontal, marginVertical, 0, 0, xSize, ySize);
 
-        if(tileInfuser.isInfusing()) {
+        if (tileInfuser.isInfusing()) {
             drawFuelStatus(marginHorizontal, marginVertical);
         }
 
         drawProgressArrow(marginHorizontal, marginVertical);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void drawInfusingTooltip(final int mouseX, final int mouseY) {
+        final String fuelLeft = String.valueOf(tileEntityContentConfig.getInfusingFuelLeft());
+
+        final int xMargin = (width - xSize) / 2;
+        final int yMargin = (height - ySize) / 2;
+        final int boxX = xMargin + 56;
+        final int boxY = yMargin + 36;
+        if (mouseX > boxX && mouseX < boxX + 14) {
+            if (mouseY > boxY && mouseY < boxY + 14) {
+                final List list = new ArrayList();
+                list.add("Experience: " + fuelLeft);
+                this.drawHoveringText(list, mouseX - xMargin, mouseY - yMargin, fontRendererObj);
+            }
+        }
     }
 
     private void drawFuelStatus(final int marginHorizontal, final int marginVertical) {
@@ -67,8 +88,9 @@ public class GUIInfuser extends GuiContainer {
     }
 
     private void drawProgressArrow(final int marginHorizontal, final int marginVertical) {
-        final int progressLevel = getProgressLevel(24);
-        drawTexturedModalRect(marginHorizontal + 79, marginVertical + 34, 176, 14, progressLevel + 1, 16);
+        final int progressLevel = getProgressLevel();
+        drawTexturedModalRect(marginHorizontal + ARROW_X, marginVertical + ARROW_Y, ARROW_TEXTURE_X, ARROW_TEXTURE_Y,
+                progressLevel + 1, GUIConstants.ARROW_TEXTURE_HEIGHT);
     }
 
     private int getInfusingFuelScaled() {
@@ -79,10 +101,10 @@ public class GUIInfuser extends GuiContainer {
         return this.tileInfuser.getField(InfuserContentConfig.INFUSING_FUEL_LEFT) * 13 / i;
     }
 
-    private int getProgressLevel(final int progressWithInPixels) {
+    private int getProgressLevel() {
         final int itemInfusingStatus = tileEntityContentConfig.getItemInfusingStatus();
         final int timeToInfuseItem = tileEntityContentConfig.getTimeToInfuseItem();
-        return timeToInfuseItem != 0 && itemInfusingStatus != 0 ?
-                (itemInfusingStatus * progressWithInPixels / timeToInfuseItem) : 0;
+        return timeToInfuseItem != 0 && itemInfusingStatus != 0 ? (itemInfusingStatus * GUIConstants
+                .ARROW_TEXTURE_WIDTH / timeToInfuseItem) : 0;
     }
 }

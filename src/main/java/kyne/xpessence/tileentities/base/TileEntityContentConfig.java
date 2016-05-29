@@ -16,10 +16,6 @@ public class TileEntityContentConfig implements Serializable {
     private final Map<Integer, String> fieldNames = new HashMap<Integer, String>();
     private final Map<Integer, SlotDefinition> slotContainers = new HashMap<Integer, SlotDefinition>();
 
-    public int getFieldWithIndex(final int index) {
-        return fields.containsKey(index) ? fields.get(index) : 0;
-    }
-
     public ItemStack getStackAtIndex(final int index) {
         return slots.get(index);
     }
@@ -36,13 +32,14 @@ public class TileEntityContentConfig implements Serializable {
         final int field = getFieldWithIndex(index);
         fields.put(index, field + 1);
     }
+
+    public int getFieldWithIndex(final int index) {
+        return fields.containsKey(index) ? fields.get(index) : 0;
+    }
+
     public void decreaseFieldAtIndex(final int index) {
         final int field = getFieldWithIndex(index);
         fields.put(index, field - 1);
-    }
-
-    public List<Integer> getSlotIndexes() {
-        return new ArrayList<Integer>(slots.keySet());
     }
 
     public List<Integer> getFieldIndexes() {
@@ -54,18 +51,11 @@ public class TileEntityContentConfig implements Serializable {
     }
 
     protected void registerSlot(final int index, final SlotDefinition slotDefinition) {
-        if(!slots.containsKey(index)) {
+        if (!slots.containsKey(index)) {
             slots.put(index, null);
         }
-        if(slotContainers.containsKey(index)) {
+        if (slotContainers.containsKey(index)) {
             slotContainers.put(index, slotDefinition);
-        }
-    }
-
-    public void debug() {
-        System.out.println("FIELDS : ");
-        for (final Map.Entry<Integer, Integer> entry : fields.entrySet()) {
-            System.out.println("Field " + entry.getKey() + " -> " + entry.getValue());
         }
     }
 
@@ -74,7 +64,7 @@ public class TileEntityContentConfig implements Serializable {
     }
 
     protected void registerField(final int index, final String name) {
-        if(!fields.containsKey(index)) {
+        if (!fields.containsKey(index)) {
             fields.put(index, 0);
         }
         fieldNames.put(index, name);
@@ -83,6 +73,4 @@ public class TileEntityContentConfig implements Serializable {
     public String getFieldName(final int index) {
         return fieldNames.get(index);
     }
-
-    
 }

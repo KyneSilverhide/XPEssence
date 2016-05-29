@@ -36,7 +36,7 @@ public class ModBlocks {
         xpInfuserOn = build(new BlockInfuser(true));
         xpInfuserOff = build(new BlockInfuser(false));
         xpCrucibleOn = build(new BlockCrucible(true));
-        xpCrucibleOn = build(new BlockCrucible(false));
+        xpCrucibleOff = build(new BlockCrucible(false));
         essenceTorch = build(new BlockEssenceTorch(), ItemBlockEssenceTorch.class);
     }
 

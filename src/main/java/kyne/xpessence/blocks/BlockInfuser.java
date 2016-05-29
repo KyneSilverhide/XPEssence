@@ -1,7 +1,7 @@
 package kyne.xpessence.blocks;
 
 import kyne.xpessence.blocks.base.BasicMachine;
-import kyne.xpessence.gui.GUI;
+import kyne.xpessence.gui.GUIConstants;
 import kyne.xpessence.tileentities.TileEntityInfuser;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockInfuser extends BasicMachine {
 
     public BlockInfuser(final boolean infusing) {
-        super(infusing, "xp_infuser", GUI.INFUSER);
+        super(infusing, "xp_infuser", GUIConstants.INFUSER);
         this.setTickRandomly(true);
     }
 

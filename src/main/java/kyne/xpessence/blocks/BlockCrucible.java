@@ -1,7 +1,7 @@
 package kyne.xpessence.blocks;
 
 import kyne.xpessence.blocks.base.BasicMachine;
-import kyne.xpessence.gui.GUI;
+import kyne.xpessence.gui.GUIConstants;
 import kyne.xpessence.tileentities.TileEntityCrucible;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockCrucible extends BasicMachine {
 
     public BlockCrucible(final boolean active) {
-        super(active, "xp_crucible", GUI.CRUCIBLE);
+        super(active, "xp_crucible", GUIConstants.CRUCIBLE);
         this.setTickRandomly(true);
     }
 

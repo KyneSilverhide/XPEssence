@@ -4,25 +4,63 @@ import kyne.xpessence.tileentities.base.BasicTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ICrafting;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class BasicContainer extends Container {
 
     private final BasicTileEntity tileEntity;
-    protected final int sizeInventory;
+    private final int sizeInventory;
+    private final Map<Integer, Integer> cachedEntityFields;
 
     public BasicContainer(final IInventory tileEntity) {
         this.tileEntity = (BasicTileEntity) tileEntity;
         this.sizeInventory = tileEntity.getSizeInventory();
+        cachedEntityFields = new HashMap<Integer, Integer>();
+    }
 
+    public int getSizeInventory() {
+        return sizeInventory;
+    }
+
+    /**
+     * Looks for changes made in the container, sends them to every listener.
+     */
+    @Override
+    public void detectAndSendChanges() {
+        super.detectAndSendChanges();
+
+        final List<Integer> fieldIndexes = getTileEntity().getTileEntityContentConfig().getFieldIndexes();
+        for (final Integer fieldIndex : fieldIndexes) {
+            final Integer entityFieldValue = getTileEntity().getField(fieldIndex);
+            final Integer cachedFieldValue = getCachedEntityFields().get(fieldIndex);
+            if (!entityFieldValue.equals(cachedFieldValue)) {
+                for (final ICrafting icrafting : crafters) {
+                    icrafting.sendProgressBarUpdate(this, fieldIndex, entityFieldValue);
+                    updateCachedField(fieldIndex, entityFieldValue);
+                }
+            }
+        }
     }
 
     public BasicTileEntity getTileEntity() {
         return tileEntity;
+    }
+
+    public Map<Integer, Integer> getCachedEntityFields() {
+        return cachedEntityFields;
+    }
+
+    private void updateCachedField(final int fieldIndex, final int fieldValue) {
+        cachedEntityFields.put(fieldIndex, fieldValue);
     }
 
     public void addPlayerInventory(final InventoryPlayer playerInventory) {
@@ -55,8 +93,8 @@ public class BasicContainer extends Container {
             if (!mergeItemStack(itemStack2, sizeInventory + 27, sizeInventory + 36, false)) {
                 return true;
             }
-        } else if (slotIndex >= sizeInventory + 27 && slotIndex < sizeInventory + 36 && !mergeItemStack(
-                itemStack2, sizeInventory + 1, sizeInventory + 27, false)) {
+        } else if (slotIndex >= sizeInventory + 27 && slotIndex < sizeInventory + 36 && !mergeItemStack(itemStack2,
+                sizeInventory + 1, sizeInventory + 27, false)) {
             return true;
         }
         return false;

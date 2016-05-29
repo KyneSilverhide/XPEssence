@@ -19,9 +19,9 @@ public class GUIHandler implements IGuiHandler {
         final BlockPos xyz = new BlockPos(x, y, z);
         final TileEntity tileEntity = world.getTileEntity(xyz);
         if (tileEntity != null) {
-            if (ID == GUI.INFUSER) {
+            if (ID == GUIConstants.INFUSER) {
                 return new ContainerInfuser(player.inventory, (IInventory) tileEntity);
-            } else if (ID == GUI.CRUCIBLE) {
+            } else if (ID == GUIConstants.CRUCIBLE) {
                 return new ContainerCrucible(player.inventory, (IInventory) tileEntity);
             }
         }
@@ -34,10 +34,10 @@ public class GUIHandler implements IGuiHandler {
         final BlockPos xyz = new BlockPos(x, y, z);
         final TileEntity tileEntity = world.getTileEntity(xyz);
         if (tileEntity != null) {
-            if (ID == GUI.INFUSER) {
+            if (ID == GUIConstants.INFUSER) {
                 final TileEntityInfuser tileEntityInfuser = (TileEntityInfuser) tileEntity;
                 return new GUIInfuser(player.inventory, tileEntityInfuser);
-            } else if (ID == GUI.CRUCIBLE) {
+            } else if (ID == GUIConstants.CRUCIBLE) {
                 final TileEntityCrucible tileEntityCrucible = (TileEntityCrucible) tileEntity;
                 return new GUICrucible(player.inventory, tileEntityCrucible);
             }

@@ -16,9 +16,10 @@ public class ContainerInfuser extends BasicContainer {
 
     public ContainerInfuser(final InventoryPlayer playerInventory, final IInventory tileEntity) {
         super(tileEntity);
+
         this.addSlotToContainer(new BasicSlot(tileEntity, InfuserContentConfig.INPUT_SLOT, SlotDefinitions.infusingDefinition, 56, 17));
         this.addSlotToContainer(new BasicSlot(tileEntity, InfuserContentConfig.FUEL_SLOT, SlotDefinitions.fuelDefinition, 56, 53));
-        this.addSlotToContainer(new BasicSlot(tileEntity, InfuserContentConfig.OUTPUT_SLOT,  SlotDefinitions.outputDefinition,116, 35));
+        this.addSlotToContainer(new BasicSlot(tileEntity, InfuserContentConfig.OUTPUT_SLOT, SlotDefinitions.outputDefinition, 116, 35));
 
         addPlayerInventory(playerInventory);
         addPlayerToolbar(playerInventory);
@@ -26,6 +27,8 @@ public class ContainerInfuser extends BasicContainer {
 
     @Override
     public ItemStack transferStackInSlot(final EntityPlayer playerIn, final int slotIndex) {
+        final int sizeInventory = getSizeInventory();
+
         ItemStack itemStack1 = null;
         final Slot slot = inventorySlots.get(slotIndex);
         if (slot != null && slot.getHasStack()) {

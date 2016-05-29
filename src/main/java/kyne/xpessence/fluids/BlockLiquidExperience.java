@@ -15,6 +15,7 @@ import java.util.Random;
 public class BlockLiquidExperience extends BlockFluidInteractive {
 
     private static final int BLOCK_UPDATE_AND_SEND_CLIENT = 3;
+    public static final int LIQUID_EFFECT_RADIUS = 6;
 
     public BlockLiquidExperience() {
         super(ModFluids.liquidExperience, Material.water);
@@ -29,14 +30,14 @@ public class BlockLiquidExperience extends BlockFluidInteractive {
     }
 
     protected void applyInteractionsNear(final World world, final BlockPos pos) {
-
-        for(int i=0; i<3; i++) {
-            final int randomX = world.rand.nextInt(10) - 5;
-            final int randomZ = world.rand.nextInt(10) - 5;
-
-            final BlockPos candidatePosition = new BlockPos(pos.getX() + randomX, pos.getY(), pos.getZ() + randomZ);
-            triggerInteractionEffects(world, pos.getX(), pos.getY(), pos.getZ());
-            interactWithBlock(world, candidatePosition);
+        for (int i = 0; i < 3; i++) {
+            final double gaussX = world.rand.nextGaussian() * LIQUID_EFFECT_RADIUS / 2;
+            final double gaussZ = world.rand.nextGaussian() * LIQUID_EFFECT_RADIUS / 2;
+            if(Math.abs(gaussX) <= LIQUID_EFFECT_RADIUS / 2 && Math.abs(gaussZ) <= LIQUID_EFFECT_RADIUS) {
+                final BlockPos candidatePosition = new BlockPos(pos.getX() + gaussX, pos.getY(), pos.getZ() + gaussZ);
+                triggerInteractionEffects(world, pos.getX(), pos.getY(), pos.getZ());
+                interactWithBlock(world, candidatePosition);
+            }
         }
     }
 

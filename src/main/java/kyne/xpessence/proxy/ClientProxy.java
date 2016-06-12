@@ -2,6 +2,7 @@ package kyne.xpessence.proxy;
 
 import kyne.xpessence.Constants;
 import kyne.xpessence.blocks.ModBlocks;
+import kyne.xpessence.entities.ModEntities;
 import kyne.xpessence.fluids.ModFluids;
 import kyne.xpessence.items.ModItems;
 import net.minecraft.block.Block;
@@ -32,6 +33,7 @@ public class ClientProxy extends CommonProxy {
 
         ModItems.registerRenders();
         ModBlocks.registerRenders();
+        ModEntities.registerRenders();
     }
 
     private void registerFluidModel(final IFluidBlock fluidBlock) {

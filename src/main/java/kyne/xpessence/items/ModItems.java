@@ -22,6 +22,7 @@ public class ModItems {
     public static Item devitalizedSeeds;
     public static Item emptyCrystal;
     public static Item bucketLiquidXP;
+    public static Item basicWand;
 
     public static void initItems() {
         xpGem = build(new ItemXPGem());
@@ -30,6 +31,7 @@ public class ModItems {
         devitalizedSeeds = build(new ItemDevitalizedSeed());
         emptyCrystal = build(new ItemEmptyCrystal());
         bucketLiquidXP = build(new BucketLiquidExperience());
+        basicWand = build(new BasicWand());
     }
 
     private static Item build(final Item item) {

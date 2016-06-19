@@ -19,9 +19,9 @@ public class TileEntityInfuser extends BasicTileEntity {
 
     public static final int ITEM_INFUSING_TIME = 200;
 
-    private static final int[] slotsTop = new int[]{InfuserContentConfig.INPUT_SLOT};
-    private static final int[] slotsBottom = new int[]{InfuserContentConfig.FUEL_SLOT};
-    private static final int[] slotsSides = new int[]{InfuserContentConfig.OUTPUT_SLOT};
+    private static final int[] slotsTop = new int[]{InfuserContentConfig.INPUT_SLOT, InfuserContentConfig.OUTPUT_SLOT, InfuserContentConfig.FUEL_SLOT};
+    private static final int[] slotsBottom = new int[]{InfuserContentConfig.INPUT_SLOT, InfuserContentConfig.OUTPUT_SLOT, InfuserContentConfig.FUEL_SLOT};
+    private static final int[] slotsSides = new int[]{InfuserContentConfig.INPUT_SLOT, InfuserContentConfig.OUTPUT_SLOT, InfuserContentConfig.FUEL_SLOT};
 
     public TileEntityInfuser() {
         super(new InfuserContentConfig(), "xp_infuser");

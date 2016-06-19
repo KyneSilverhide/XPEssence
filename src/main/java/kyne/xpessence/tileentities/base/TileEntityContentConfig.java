@@ -54,7 +54,7 @@ public class TileEntityContentConfig implements Serializable {
         if (!slots.containsKey(index)) {
             slots.put(index, null);
         }
-        if (slotContainers.containsKey(index)) {
+        if (!slotContainers.containsKey(index)) {
             slotContainers.put(index, slotDefinition);
         }
     }

@@ -1,18 +1,11 @@
 /LICENSE-fml.txt
 /Paulscode SoundSystem CodecIBXM License.txt
 /Paulscode IBXM Library License.txt
-/forge-1.8.9-11.15.1.1722-changelog.txt
 /MinecraftForge-Credits.txt
 /CREDITS-fml.txt
 /MinecraftForge-License.txt
 /README.txt
-# eclipse
-bin
-*.launch
-.settings
-.metadata
-.classpath
-.project
+/forge-1.9.4-12.17.0.1968-changelog.txt
 
 # idea
 out
@@ -29,3 +22,4 @@ build
 # other
 eclipse
 run
+/gradle/

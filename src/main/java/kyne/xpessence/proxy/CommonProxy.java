@@ -3,7 +3,6 @@ package kyne.xpessence.proxy;
 import kyne.xpessence.Constants;
 import kyne.xpessence.XpEssence;
 import kyne.xpessence.blocks.ModBlocks;
-import kyne.xpessence.entities.ModEntities;
 import kyne.xpessence.events.BucketHandler;
 import kyne.xpessence.events.MobDropEvent;
 import kyne.xpessence.fluids.ModFluids;
@@ -39,8 +38,6 @@ public class CommonProxy {
         registerGUIs();
         registerEvents();
         registerTallGrass();
-
-        ModEntities.registerEntities();
     }
 
     private void registerRecipes() {

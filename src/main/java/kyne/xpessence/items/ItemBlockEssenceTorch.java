@@ -14,7 +14,7 @@ public class ItemBlockEssenceTorch extends ItemBlock {
     }
 
     @Override
-    public void addInformation(final ItemStack stack, final EntityPlayer player, final List list, final boolean par4) {
-        list.add("An alternative to the vanilla torch");
+    public void addInformation(final ItemStack stack, final EntityPlayer player, final List<String> tooltip, final boolean advanced) {
+        tooltip.add("An alternative to the vanilla torch");
     }
 }

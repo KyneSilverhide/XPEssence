@@ -44,7 +44,7 @@ public class ContainerCrucible extends BasicContainer {
                     if (!mergeItemStack(itemStack2, 0, 1, false)) {
                         return null;
                     }
-                } else if(Items.bucket == itemStack2.getItem()) {
+                } else if(Items.BUCKET == itemStack2.getItem()) {
                     if (!mergeItemStack(itemStack2, 1, 2, false)) {
                         return null;
                     }

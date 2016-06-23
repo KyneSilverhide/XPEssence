@@ -18,7 +18,7 @@ public class ModShapelessRecipes {
     }
 
     private static void xpBottleToXpGem() {
-        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.xpGem, 3), new ItemStack(Items.experience_bottle),
-                new ItemStack(Items.emerald));
+        GameRegistry.addShapelessRecipe(new ItemStack(ModItems.xpGem, 3), new ItemStack(Items.EXPERIENCE_BOTTLE),
+                new ItemStack(Items.EMERALD));
     }
 }

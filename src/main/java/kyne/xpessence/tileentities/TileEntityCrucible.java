@@ -15,10 +15,11 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import javax.annotation.Nullable;
 
 
 public class TileEntityCrucible extends BasicTileEntity implements IFluidHandler {
@@ -78,7 +79,7 @@ public class TileEntityCrucible extends BasicTileEntity implements IFluidHandler
                 if(bucketItem == null) {
                     crucibleContentConfig.setTankToBucketStatus(0);
                 }
-            } else if(bucketItem != null && bucketItem.getItem() == Items.bucket && bucketItem.stackSize == 1) {
+            } else if(bucketItem != null && bucketItem.getItem() == Items.BUCKET && bucketItem.stackSize == 1) {
                 crucibleContentConfig.increaseTankToBucketStatus();
             }
 
@@ -130,49 +131,35 @@ public class TileEntityCrucible extends BasicTileEntity implements IFluidHandler
         return new ContainerCrucible(playerInventory, this);
     }
 
-    @Override
-    public int fill(final EnumFacing from, final FluidStack resource, final boolean doFill) {
-        return 0;
-    }
-
-    @Override
-    public FluidStack drain(final EnumFacing from, final FluidStack drainFluid, final boolean doDrain) {
-        return drainLiquidXP(-1, doDrain);
-    }
-
-    @Override
-    public FluidStack drain(final EnumFacing from, final int drainAmount, final boolean doDrain) {
-        return drainLiquidXP(drainAmount, doDrain);
-    }
-
     private FluidStack drainLiquidXP(final int drainAmount, final boolean doDrain) {
-        if (!worldObj.isRemote) {
-
+        if (!worldObj.isRemote && doDrain) {
             final int validAmount = Math.min(crucibleContentConfig.getTankContentMb(), drainAmount);
             final FluidStack drainedFluid = new FluidStack(ModFluids.liquidExperience, validAmount);
             crucibleContentConfig.setTankContentMb(crucibleContentConfig.getTankContentMb() - validAmount);
-
-            if (doDrain && drainedFluid.amount > 0) {
-                worldObj.markBlockForUpdate(pos);
-            }
             return drainedFluid;
         }
         return null;
     }
 
-
     @Override
-    public boolean canFill(final EnumFacing from, final Fluid fluid) {
-        return false;
+    public IFluidTankProperties[] getTankProperties() {
+        return new IFluidTankProperties[0];
     }
 
     @Override
-    public boolean canDrain(final EnumFacing from, final Fluid fluid) {
-        return fluid == ModFluids.liquidExperience && crucibleContentConfig.getTankContentMb() > 0;
+    public int fill(final FluidStack resource, final boolean doFill) {
+        return 0;
     }
 
+    @Nullable
     @Override
-    public FluidTankInfo[] getTankInfo(final EnumFacing from) {
-        return new FluidTankInfo[0];
+    public FluidStack drain(final FluidStack resource, final boolean doDrain) {
+        return drainLiquidXP(-1, doDrain);
+    }
+
+    @Nullable
+    @Override
+    public FluidStack drain(final int maxDrain, final boolean doDrain) {
+        return drainLiquidXP(maxDrain, doDrain);
     }
 }

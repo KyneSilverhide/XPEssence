@@ -23,22 +23,22 @@ public class ModShapedRecipes {
     private static void basicWand() {
         GameRegistry.addShapedRecipe(new ItemStack(ModItems.basicWand), "g  ", " s ", "  g",
                 'g', ModItems.xpGem,
-                's', Items.stick);
+                's', Items.STICK);
     }
 
     private static void xpInfuser() {
         GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.xpInfuserOff), "sgs", "sfs", "sps",
-                's', Item.getItemFromBlock(Blocks.stone),
+                's', Item.getItemFromBlock(Blocks.STONE),
                 'g', ModItems.xpGem,
-                'f', Item.getItemFromBlock(Blocks.furnace),
-                'p', Blocks.piston);
+                'f', Item.getItemFromBlock(Blocks.FURNACE),
+                'p', Blocks.PISTON);
     }
 
     private static void xpCrucible() {
         GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.xpCrucibleOff), "sgs", "sfs", "sgs",
-                's', Item.getItemFromBlock(Blocks.stone),
+                's', Item.getItemFromBlock(Blocks.STONE),
                 'g', ModItems.xpGem,
-                'f', Item.getItemFromBlock(Blocks.furnace));
+                'f', Item.getItemFromBlock(Blocks.FURNACE));
     }
 
     private static void xpGemToBlock() {
@@ -53,11 +53,11 @@ public class ModShapedRecipes {
 
     private static void glassPaneToEmptyCrystal() {
         GameRegistry.addShapedRecipe(new ItemStack(ModItems.emptyCrystal), " p ", "p p", " p ",
-                'p', Blocks.glass_pane);
+                'p', Blocks.GLASS_PANE);
     }
 
     private static void experienceTorch() {
         GameRegistry.addShapedRecipe(new ItemStack(ModBlocks.essenceTorch, 2), "tgt",
-                't', Blocks.torch, 'g', ModItems.xpGem);
+                't', Blocks.TORCH, 'g', ModItems.xpGem);
     }
 }

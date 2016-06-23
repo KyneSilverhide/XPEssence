@@ -5,22 +5,22 @@ import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
-public class EntityGreenFire extends EntityThrowable {
+public class EntitySpark extends EntityThrowable {
 
-    public EntityGreenFire(final World worldIn, final EntityLivingBase throwerIn) {
+    public EntitySpark(final World worldIn, final EntityLivingBase throwerIn) {
         super(worldIn, throwerIn);
     }
 
     // Required for reflection
-    public EntityGreenFire(final World worldIn) {
+    public EntitySpark(final World worldIn) {
         super(worldIn);
     }
 
     // Required for reflection
-    public EntityGreenFire(final World worldIn, final double x, final double y, final double z) {
+    public EntitySpark(final World worldIn, final double x, final double y, final double z) {
         super(worldIn, x, y, z);
     }
 
@@ -30,7 +30,7 @@ public class EntityGreenFire extends EntityThrowable {
         super.onUpdate();
     }
 
-    protected void onImpact(final MovingObjectPosition position) {
+    protected void onImpact(final RayTraceResult position) {
         if (position.entityHit != null) {
             int i = 0;
             if (position.entityHit instanceof EntityBlaze) {

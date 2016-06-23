@@ -17,8 +17,8 @@ public class ModInfusingRecipes {
 
     public static void registerSmeltingRecipes() {
         addSmeltingRecipe(new ItemStack(ModItems.devitalizedSeeds), new ItemStack(ModItems.xpSeeds));
-        addSmeltingRecipe(new ItemStack(Items.apple), new ItemStack(ModItems.xpApple));
-        addSmeltingRecipe(new ItemStack(Item.getItemFromBlock(Blocks.glass)),
+        addSmeltingRecipe(new ItemStack(Items.APPLE), new ItemStack(ModItems.xpApple));
+        addSmeltingRecipe(new ItemStack(Item.getItemFromBlock(Blocks.GLASS)),
                 new ItemStack(Item.getItemFromBlock(ModBlocks.xpGemGlassBlock)));
     }
 

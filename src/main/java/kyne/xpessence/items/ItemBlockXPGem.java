@@ -19,8 +19,8 @@ public class ItemBlockXPGem extends ItemBlockXPFuel {
     }
 
     @Override
-    public void addInformation(final ItemStack stack, final EntityPlayer player, final List list, final boolean par4) {
-        list.add("Can replace bookshelves near enchanting tables");
-        list.add("Provides a bit of light");
+    public void addInformation(final ItemStack stack, final EntityPlayer player, final List<String> tooltip, final boolean advanced) {
+        tooltip.add("Can replace bookshelves near enchanting tables");
+        tooltip.add("Provides a bit of light");
     }
 }

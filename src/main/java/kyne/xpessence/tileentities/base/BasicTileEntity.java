@@ -1,7 +1,6 @@
 package kyne.xpessence.tileentities.base;
 
 import kyne.xpessence.Constants;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,10 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityLockable;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.world.World;
 
 
 public abstract class BasicTileEntity extends TileEntityLockable implements ISidedInventory, ITickable {
@@ -29,11 +26,6 @@ public abstract class BasicTileEntity extends TileEntityLockable implements ISid
     @Override
     public String getName() {
         return "container." + name + ".name";
-    }
-
-    @Override
-    public boolean shouldRefresh(final World world, final BlockPos pos, final IBlockState oldState, final IBlockState newSate) {
-        return (oldState.getBlock() != newSate.getBlock());
     }
 
     @Override
@@ -85,7 +77,7 @@ public abstract class BasicTileEntity extends TileEntityLockable implements ISid
         }
     }
 
-    public void writeToNBT(final NBTTagCompound compound) {
+    public NBTTagCompound writeToNBT(final NBTTagCompound compound) {
         super.writeToNBT(compound);
 
         for (final Integer index : tileEntityContentConfig.getFieldIndexes()) {
@@ -102,6 +94,7 @@ public abstract class BasicTileEntity extends TileEntityLockable implements ISid
             }
         }
         compound.setTag("Items", nbttaglist);
+        return compound;
     }
 
     @Override

@@ -1,7 +1,0 @@
-{
-  "parent": "block/pane_sew",
-  "textures": {
-    "edge": "xpessence:blocks/gemglass_pane_top",
-    "pane": "xpessence:blocks/xp_gemglass_block"
-  }
-}

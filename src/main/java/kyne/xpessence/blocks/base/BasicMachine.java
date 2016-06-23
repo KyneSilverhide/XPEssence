@@ -6,7 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,12 +15,12 @@ import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Random;
 
@@ -33,7 +33,7 @@ public abstract class BasicMachine extends BlockContainer {
     private static boolean keepInventory = false;
 
     public BasicMachine(final boolean active, final String name, final int guiID) {
-        super(Material.rock);
+        super(Material.ROCK);
         this.active = active;
         this.guiID = guiID;
         this.setUnlocalizedName(name + "_" + (active ? "on" : "off"));
@@ -43,7 +43,6 @@ public abstract class BasicMachine extends BlockContainer {
             this.setCreativeTab(ModTabs.creativeTab);
         }
     }
-
     public static void setState(final boolean active, final World worldIn, final BlockPos pos, final Block machineActiveBlock, final Block machineInactiveBlock) {
         final IBlockState iblockstate = worldIn.getBlockState(pos);
         final TileEntity tileentity = worldIn.getTileEntity(pos);
@@ -65,8 +64,10 @@ public abstract class BasicMachine extends BlockContainer {
     public void breakBlock(final World worldIn, final BlockPos pos, final IBlockState state) {
         if (!keepInventory) {
             final TileEntity tileentity = worldIn.getTileEntity(pos);
-            InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileentity);
-            worldIn.updateComparatorOutputLevel(pos, this);
+            if(tileentity != null) {
+                InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) tileentity);
+                worldIn.updateComparatorOutputLevel(pos, this);
+            }
             super.breakBlock(worldIn, pos, state);
         }
     }
@@ -76,42 +77,42 @@ public abstract class BasicMachine extends BlockContainer {
     }
 
     @Override
-    public abstract Item getItem(World worldIn, BlockPos pos);
+    public abstract ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player);
 
     @Override
     public Item getItemDropped(final IBlockState state, final Random rand, final int fortune) {
-        return getItem(null, null);
+        return getPickBlock(state, null, null, null, null).getItem();
     }
 
     @Override
-    public void onBlockAdded(final World parWorld, final BlockPos parBlockPos, final IBlockState parIBlockState) {
-        if (!parWorld.isRemote) {
-            final Block blockToNorth = parWorld.getBlockState(parBlockPos.north()).getBlock();
-            final Block blockToSouth = parWorld.getBlockState(parBlockPos.south()).getBlock();
-            final Block blockToWest = parWorld.getBlockState(parBlockPos.west()).getBlock();
-            final Block blockToEast = parWorld.getBlockState(parBlockPos.east()).getBlock();
-            EnumFacing enumfacing = parIBlockState.getValue(FACING);
+    public void onBlockAdded(final World worldIn, final BlockPos pos, final IBlockState state) {
+        if (!worldIn.isRemote) {
+            final IBlockState iblockstate = worldIn.getBlockState(pos.north());
+            final IBlockState iblockstate1 = worldIn.getBlockState(pos.south());
+            final IBlockState iblockstate2 = worldIn.getBlockState(pos.west());
+            final IBlockState iblockstate3 = worldIn.getBlockState(pos.east());
+            EnumFacing enumfacing = state.getValue(FACING);
 
-            if (enumfacing == EnumFacing.NORTH && blockToNorth.isFullBlock() && !blockToSouth.isFullBlock()) {
+            if (enumfacing == EnumFacing.NORTH && iblockstate.isFullBlock() && !iblockstate1.isFullBlock()) {
                 enumfacing = EnumFacing.SOUTH;
-            } else if (enumfacing == EnumFacing.SOUTH && blockToSouth.isFullBlock() && !blockToNorth.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.SOUTH && iblockstate1.isFullBlock() && !iblockstate.isFullBlock()) {
                 enumfacing = EnumFacing.NORTH;
-            } else if (enumfacing == EnumFacing.WEST && blockToWest.isFullBlock() && !blockToEast.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.WEST && iblockstate2.isFullBlock() && !iblockstate3.isFullBlock()) {
                 enumfacing = EnumFacing.EAST;
-            } else if (enumfacing == EnumFacing.EAST && blockToEast.isFullBlock() && !blockToWest.isFullBlock()) {
+            } else if (enumfacing == EnumFacing.EAST && iblockstate3.isFullBlock() && !iblockstate2.isFullBlock()) {
                 enumfacing = EnumFacing.WEST;
             }
 
-            parWorld.setBlockState(parBlockPos, parIBlockState.withProperty(FACING, enumfacing), 2);
+            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
         }
     }
 
     @Override
-    public boolean onBlockActivated(final World parWorld, final BlockPos parBlockPos, final IBlockState parIBlockState,
-                                    final EntityPlayer parPlayer, final EnumFacing parSide, final float hitX,
+    public boolean onBlockActivated(final World worldIn, final BlockPos pos, final IBlockState state, final EntityPlayer playerIn,
+                                    final EnumHand hand, final ItemStack heldItem, final EnumFacing side, final float hitX,
                                     final float hitY, final float hitZ) {
-        if (!parWorld.isRemote) {
-            parPlayer.openGui(XpEssence.instance, guiID, parWorld, parBlockPos.getX(), parBlockPos.getY(), parBlockPos.getZ());
+        if (!worldIn.isRemote) {
+            playerIn.openGui(XpEssence.instance, guiID, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }
@@ -133,14 +134,8 @@ public abstract class BasicMachine extends BlockContainer {
     }
 
     @Override
-    public int getRenderType() {
-        return 3;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IBlockState getStateForEntityRender(final IBlockState state) {
-        return getDefaultState().withProperty(FACING, EnumFacing.SOUTH);
+    public EnumBlockRenderType getRenderType(final IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
@@ -158,10 +153,7 @@ public abstract class BasicMachine extends BlockContainer {
     }
 
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, FACING);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
     }
-
-    @Override
-    public abstract int getLightValue(final IBlockAccess world, final BlockPos pos);
 }

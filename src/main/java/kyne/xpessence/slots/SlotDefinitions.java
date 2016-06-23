@@ -32,7 +32,7 @@ public class SlotDefinitions {
     public static SlotDefinition bucketDefinition = new SlotDefinition() {
         @Override
         public boolean isItemValid(final ItemStack stack) {
-            return stack.getItem() == Items.bucket;
+            return stack.getItem() == Items.BUCKET;
         }
     };
 }

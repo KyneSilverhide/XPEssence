@@ -13,10 +13,10 @@ public class MobDropEvent {
     @SubscribeEvent
     public void onEntityDrop(final LivingDropsEvent event) {
 
-        final int fortune = event.lootingLevel;
+        final int fortune = event.getLootingLevel();
         final boolean shouldDrop = random.nextInt(100) < (6 + fortune * 2);
         if(shouldDrop) {
-            event.entityLiving.dropItem(ModItems.xpGem, 1);
+            event.getEntityLiving().dropItem(ModItems.xpGem, 1);
         }
     }
 }

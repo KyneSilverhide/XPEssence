@@ -3,12 +3,9 @@ package kyne.xpessence.blocks;
 import kyne.xpessence.blocks.base.BasicCrop;
 import kyne.xpessence.items.ModItems;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,11 +32,5 @@ public class BlockXPCrop extends BasicCrop {
             }
         }
         return drops;
-    }
-
-    @Override
-    public ItemStack getPickBlock(final MovingObjectPosition target, final World world, final BlockPos pos,
-                                  final EntityPlayer player) {
-        return new ItemStack(ModItems.xpSeeds);
     }
 }

@@ -4,7 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -19,11 +19,11 @@ public class BucketHandler {
 
     @SubscribeEvent
     public void onBucketFill(final FillBucketEvent event) {
-        final ItemStack result = fillCustomBucket(event.world, event.target);
+        final ItemStack result = fillCustomBucket(event.getWorld(), event.getTarget());
         if (result == null) {
             return;
         }
-        event.result = result;
+        event.setFilledBucket(result);
         event.setResult(Result.ALLOW);
     }
 
@@ -31,12 +31,12 @@ public class BucketHandler {
         buckets.put(fluidBlock, bucketItem);
     }
 
-    private ItemStack fillCustomBucket(final World world, final MovingObjectPosition pos) {
-        final Block block = world.getBlockState(pos.getBlockPos()).getBlock();
+    private ItemStack fillCustomBucket(final World world, RayTraceResult target) {
+        final Block block = world.getBlockState(target.getBlockPos()).getBlock();
 
         final Item bucket = buckets.get(block);
         if (bucket != null) {
-            world.setBlockState(pos.getBlockPos(), Blocks.air.getDefaultState());
+            world.setBlockState(target.getBlockPos(), Blocks.AIR.getDefaultState());
             return new ItemStack(bucket);
         } else {
             return null;

@@ -4,7 +4,7 @@ import kyne.xpessence.tileentities.base.BasicTileEntity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -43,7 +43,7 @@ public class BasicContainer extends Container {
             final Integer entityFieldValue = getTileEntity().getField(fieldIndex);
             final Integer cachedFieldValue = getCachedEntityFields().get(fieldIndex);
             if (!entityFieldValue.equals(cachedFieldValue)) {
-                for (final ICrafting icrafting : crafters) {
+                for (final IContainerListener icrafting : listeners) {
                     icrafting.sendProgressBarUpdate(this, fieldIndex, entityFieldValue);
                     updateCachedField(fieldIndex, entityFieldValue);
                 }

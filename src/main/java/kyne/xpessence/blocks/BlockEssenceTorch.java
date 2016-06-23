@@ -3,11 +3,12 @@ package kyne.xpessence.blocks;
 import kyne.xpessence.fx.GreenFireFX;
 import kyne.xpessence.tab.ModTabs;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,12 +21,12 @@ public class BlockEssenceTorch extends BlockTorch {
         this.setUnlocalizedName("essence_torch");
         this.setHardness(0.0F);
         this.setLightLevel(0.9375F);
-        this.setStepSound(soundTypeWood);
+        this.setSoundType(SoundType.WOOD);
         this.setCreativeTab(ModTabs.creativeTab);
     }
 
     @SideOnly(Side.CLIENT)
-    public void randomDisplayTick(final World worldIn, final BlockPos pos, final IBlockState state, final Random rand) {
+    public void randomDisplayTick(IBlockState state, World worldIn, BlockPos pos, Random rand) {
         final EnumFacing enumfacing = state.getValue(FACING);
         final double posX = (double) pos.getX() + 0.5D;
         final double posY = (double) pos.getY() + 0.7D;

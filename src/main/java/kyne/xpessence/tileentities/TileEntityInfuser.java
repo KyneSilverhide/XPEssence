@@ -12,7 +12,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 
 
 public class TileEntityInfuser extends BasicTileEntity {
@@ -136,7 +136,7 @@ public class TileEntityInfuser extends BasicTileEntity {
         return 0;
     }
 
-    public void infuseItem(final ItemStack inputItem, final ItemStack outputItem) {
+    private void infuseItem(final ItemStack inputItem, final ItemStack outputItem) {
         if (canInfuseInputToOutput(inputItem, outputItem)) {
             final ItemStack futureInfusedItem = ModInfusingRecipes.getInfusingResults(
                     getTileEntityContentConfig().getInputSlot());

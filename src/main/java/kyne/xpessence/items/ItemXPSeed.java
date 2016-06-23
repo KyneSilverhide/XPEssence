@@ -14,7 +14,7 @@ import java.util.List;
 public class ItemXPSeed extends ItemSeeds {
 
     public ItemXPSeed() {
-        super(ModBlocks.xpCropBlock, Blocks.farmland);
+        super(ModBlocks.xpCropBlock, Blocks.FARMLAND);
         this.setUnlocalizedName("xp_seed");
         this.setCreativeTab(ModTabs.creativeTab);
     }
@@ -26,7 +26,7 @@ public class ItemXPSeed extends ItemSeeds {
     }
 
     @Override
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
-        list.add("Similar to other seeds, but grows XP Gems");
+    public void addInformation(final ItemStack stack, final EntityPlayer player, final List<String> tooltip, final boolean advanced) {
+        tooltip.add("Similar to other seeds, but grows XP Gems");
     }
 }

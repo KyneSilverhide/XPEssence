@@ -1,6 +1,6 @@
 {
   "parent": "item/generated",
   "textures": {
-    "layer0": "xpessence:blocks/xp_gemglass_block"
+    "layer0": "xpessence:blocks/xp_crop4"
   }
 }

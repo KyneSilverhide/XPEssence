@@ -1,9 +1,9 @@
 package kyne.xpessence.fx;
 
-import net.minecraft.client.particle.EntityFlameFX;
+import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.world.World;
 
-public class GreenFireFX extends EntityFlameFX {
+public class GreenFireFX extends ParticleFlame {
 
     private static final int ENTITY_FLAME_INDEX = 48;
 

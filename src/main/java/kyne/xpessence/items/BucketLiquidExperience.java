@@ -14,12 +14,12 @@ public class BucketLiquidExperience extends ItemBucket {
     public BucketLiquidExperience() {
         super(ModFluids.liquidExperienceBlock);
         this.setUnlocalizedName("bucket_liquid_experience");
-        this.setContainerItem(Items.bucket);
+        this.setContainerItem(Items.BUCKET);
         this.setCreativeTab(ModTabs.creativeTab);
     }
 
     @Override
-    public void addInformation(final ItemStack stack, final EntityPlayer player, final List list, final boolean par4) {
-        list.add("Better than slime...");
+    public void addInformation(final ItemStack stack, final EntityPlayer player, final List<String> tooltip, final boolean advanced) {
+        tooltip.add("Better than slime...");
     }
 }

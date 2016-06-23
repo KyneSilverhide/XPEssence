@@ -15,7 +15,7 @@ public class ItemDevitalizedSeed extends Item {
     }
 
     @Override
-    public void addInformation(final ItemStack stack, final EntityPlayer player, final List list, final boolean par4) {
-        list.add("These seeds could be revitalized in the infuser");
+    public void addInformation(final ItemStack stack, final EntityPlayer player, final List<String> tooltip, final boolean advanced) {
+        tooltip.add("These seeds could be revitalized in the infuser");
     }
 }

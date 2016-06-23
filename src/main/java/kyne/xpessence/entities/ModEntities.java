@@ -9,11 +9,11 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 public class ModEntities {
 
     public static void registerRenders() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityGreenFire.class,
+        RenderingRegistry.registerEntityRenderingHandler(EntitySpark.class,
                 new RenderGreenFire<Entity>(Minecraft.getMinecraft().getRenderManager()));
     }
 
     public static void registerEntities() {
-        EntityRegistry.registerModEntity(EntityGreenFire.class, "GreenFire", 1, XpEssence.instance, 64, 10, true);
+        EntityRegistry.registerModEntity(EntitySpark.class, "GreenFire", 1, XpEssence.instance, 64, 10, true);
     }
 }
